@@ -1,0 +1,8 @@
+ ! NOAA/PMEL TMAP
+ ! FERRET v7.5 (optimized)
+ ! Linux 3.10.0-957.10.1.el7.x86_64 64-bit - 04/25/19
+ ! 15-Jan-20 16:33     
+
+cd NEMO/
+ls
+quit
