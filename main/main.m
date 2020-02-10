@@ -1,3 +1,6 @@
 clear;close all;clc;
 
-%%%%%%le main %%%%%%
+addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+
+
+%%%%%% le main %%%%%%
