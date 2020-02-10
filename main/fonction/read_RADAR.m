@@ -9,5 +9,5 @@ data_RADAR.yr=ncread(name_file,'yr');
 data_RADAR.lon=ncread(name_file,'lon');
 data_RADAR.lat=ncread(name_file,'lat');
 data_RADAR.time=ncread(name_file,'time');
-data_RADAR.v=ncread(name_file,'v');
+data_RADAR.Vr=ncread(name_file,'v');
 end
