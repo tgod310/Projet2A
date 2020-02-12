@@ -10,7 +10,7 @@ addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter
 addpath('fonction')
 
 % Origine des temps
-time_origin='2010-01-01 01:00:00';
+time_origin='2010-01-01 00:00:00';
 
 %% Début du programme
 
@@ -18,7 +18,25 @@ time_origin='2010-01-01 01:00:00';
 radar=read_RADAR('20190300001_20191002301_PEY_L1.nc');
 model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
 
-%model.time=model.time-datenum(time_origin);
+% Uniformisation du temps
+time_origin=datenum(time_origin);
+radar.time=radar.time+radar.time_origin-time_origin;
+model.time=model.time/(60*60*24)+model.time_origin-time_origin;
+
+% Recuperation des plages de donnees commune dans le temps
+radar.time_min=min(radar.time);
+radar.time_max=max(radar.time);
+model.time_min=min(model.time);
+model.time_max=max(model.time);
+
+if (radar.time_min > model.time_max) | (radar.time_max < model.time_min)
+    error("Les donnees a comparer n'ont pas de plages de donnees communes");
+elseif radar.time_max > model.time_min
+    time_0=model.time_min;
+elseif radar.time_min < model.time_max
+    time_0=radar.time_min;
+end
+
 
 
 

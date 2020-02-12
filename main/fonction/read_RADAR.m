@@ -10,4 +10,5 @@ data_RADAR.lon=ncread(name_file,'lon');
 data_RADAR.lat=ncread(name_file,'lat');
 data_RADAR.time=ncread(name_file,'time');
 data_RADAR.Vr=ncread(name_file,'v');
+data_RADAR.time_origin=datenum(data_RADAR.info.Variables(6).Attributes(3).Value);
 end
