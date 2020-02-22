@@ -41,6 +41,6 @@ elseif radar.time_min < model.time_max
     time_end=min(model.time_max,radar.time_max);
 end
 
-[model,radar]=interpolation(model,radar);
+interpolat
 
 
