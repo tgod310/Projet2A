@@ -8,7 +8,7 @@ end
 s=size(radar.Vr);
 for i=1:s(1)
     for j=1:s(2)
-        radar.Vr=interp1(radar.time,squeeze(radar.Vr(i,j,:)),model.time);
+        radar.interp_Vr(i,j,:)=interp1(radar.time,squeeze(radar.Vr(i,j,:)),model.time);
     end
 end
 end

@@ -42,5 +42,13 @@ elseif radar.time_min < model.time_max
 end
 
 [model,radar]=interpolation(model,radar);
+[model,radar]=projection(model,radar);
 
-
+figure()
+contourf(radar.lon,radar.lat,radar.Vr(:,:,1));
+colorbar
+c=caxis;
+figure()
+contourf(radar.lon,radar.lat,model.Vr(:,:,1));
+colorbar
+caxis(c);
