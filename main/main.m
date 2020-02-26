@@ -48,7 +48,9 @@ figure()
 contourf(radar.lon,radar.lat,radar.Vr(:,:,1));
 colorbar
 c=caxis;
+title('Radar')
 figure()
 contourf(radar.lon,radar.lat,model.Vr(:,:,1));
 colorbar
+title('Modele')
 caxis(c);
