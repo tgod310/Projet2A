@@ -72,8 +72,8 @@ elseif radar.lon_min < model.lon_max
 end
 
 %% A modifier, ne fonctionne pas, but : garder que les lat et lon qui sont dans la zone commune de l'espace
-i_lat=find(radar.lat<lat_0 | radar.lat>lat_end);
-i_lon=find(radar.lon<lon_0 | radar.lon>lon_end);
+i_lat=find(radar.lat<lat_0 & radar.lat>lat_end);
+i_lon=find(radar.lon<lon_0 & radar.lon>lon_end);
 
 radar.lat(i_lat)=NaN;
 radar.lon(i_lon)=NaN;
