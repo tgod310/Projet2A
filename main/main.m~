@@ -51,4 +51,4 @@ c=caxis;
 figure()
 contourf(radar.lon,radar.lat,model.Vr(:,:,1));
 colorbar
-caxis(c);
+caxis(
