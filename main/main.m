@@ -83,22 +83,31 @@ radar.Vr(i_lon)=NaN;
 [model,radar]=interpolation(model,radar);
 [model,radar]=projection(model,radar);
 
+temps=1;
+
 figure()
-contourf(radar.lon,radar.lat,radar.Vr(:,:,1));
+contourf(radar.lon,radar.lat,radar.Vr(:,:,temps));
 colorbar
 c=caxis;
 title('Radar')
 
 figure()
-contourf(radar.lon,radar.lat,model.Vr(:,:,1));
+contourf(radar.lon,radar.lat,model.Vr(:,:,temps));
 colorbar
 title('Projection du modele')
 caxis(c);
 
 figure()
-contourf(model.lon,model.lat,model.norm(:,:,1));
+hold on
+contourf(model.lon,model.lat,model.norm(:,:,temps));
+quiver(model.lon,model.lat,model.U(:,:,temps),model.V(:,:,temps),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+hold off
 colorbar
 title('Norme du modele')
 caxis(c);
 
-
+figure()
+hold on
+contourf(radar.lon,radar.lat,sqrt(model.interp_U(:,:,temps).^2+model.interp_V(:,:,temps).^2))
+quiver(radar.lon,radar.lat,model.interp_U(:,:,temps),model.interp_V(:,:,temps),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+hold off
