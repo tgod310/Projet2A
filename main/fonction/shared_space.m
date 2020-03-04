@@ -14,14 +14,9 @@ model.lon_max=max(max(model.lon));
 i_lat=radar.lat<shared.lat_0 | radar.lat>shared.lat_end;
 i_lon=radar.lon<shared.lon_0 | radar.lon>shared.lon_end;
 
-radar.interp_Vr=radar.Vr;
-radar.interp_Vr(i_lat)=NaN;
-radar.interp_Vr(i_lon)=NaN;
-
-i_Vr=isnan(radar.interp_Vr(:,:,1));
 shared.lon=radar.lon;
 shared.lat=radar.lat;
-shared.lon(i_Vr)=NaN;
-shared.lat(i_Vr)=NaN;
+shared.lon(i_lon)=NaN;
+shared.lat(i_lat)=NaN;
 end
 

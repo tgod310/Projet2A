@@ -19,25 +19,27 @@ radar=read_RADAR('20190300001_20191002301_PEY_L1.nc');
 model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
 
 % Uniformisation du temps
-shared.time_origin_julien=datenum(shared.time_origin);
-radar.time=radar.time+radar.time_origin-shared.time_origin_julien;
-model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien;
+shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calandrier julien
+radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar sur origine des temps
+model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
 
-[model,radar,shared]=shared_time(model,radar,shared);
+[model,radar,shared]=shared_time(model,radar,shared); % recupération des plages temps communes
 
 % Uniformisation de l'espace
-[model,radar,shared]=shared_space(model,radar,shared);
+[model,radar,shared]=shared_space(model,radar,shared); % recuperation des plages espace communes
 
-[model,radar]=interpolation(model,radar,shared);
-[model,radar]=projection(model,radar);
+[model,radar]=interpolation(model,radar,shared); % interpolation model sur espace et moyenne radar sur temps
+[model,radar]=projection(model,radar); % projection model sur radiale du radar
 
-temps=2;
+
+%% Affichage
+temps=14; % choix du jour a afficher
 
 figure()
 contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,temps));
 colorbar
 c=caxis;
-title('Radar')
+title('Moyenne radar par jour')
 
 figure()
 contourf(shared.lon,shared.lat,model.Vr(:,:,temps));
@@ -62,3 +64,11 @@ quiver(shared.lon,shared.lat,model.interp_U(:,:,temps),model.interp_V(:,:,temps)
 hold off
 title('projection du modele')
 caxis(c)
+
+%% Comparaison
+shared.difference=(abs(model.Vr)-abs(radar.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
+
+figure()
+contourf(shared.lon,shared.lat,shared.difference(:,:,temps))
+colorbar
+title('Comparaison entre radar et model')
