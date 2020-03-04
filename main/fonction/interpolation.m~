@@ -7,9 +7,16 @@ end
 
 s=length(shared.time);
 for i=1:s-1
-    i_min=find(radar.time>=shared.time(i), 1 );
-    i_max=find(radar.time<=shared.time(i+1), 1, 'last' );
-    radar.interp_Vr(:,:,i)=mean(radar.Vr(:,:,i_min:i_max),3);
+    i_min=find(radar.time>=shared.time(i), 1 )
+    i_max=find(radar.time<=shared.time(i+1), 1, 'last' )
+    radar.interp_Vr(i)=
 end
+
+% s=size(radar.Vr);
+% for i=1:s(1)
+%     for j=1:s(2)
+%         radar.interp_Vr(i,j,:)=interp1(radar.time,squeeze(radar.Vr(i,j,:)),shared.time);% ou moyenne 
+%     end
+% end
 end
 
