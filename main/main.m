@@ -39,22 +39,41 @@ colorbar
 c=caxis;
 title('Radar')
 
+<<<<<<< Updated upstream
 figure()
 contourf(shared.lon,shared.lat,model.Vr(:,:,temps));
 colorbar
 title('Projection du modele')
 caxis(c);
+=======
+
+% 
+% figure()
+% hold on
+% contourf(model.lon,model.lat,model.norm(:,:,temps));
+% quiver(model.lon,model.lat,model.U(:,:,temps),model.V(:,:,temps),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+% hold off
+% title('norme du modele')
+% c=caxis;
+% 
+% 
+% figure()
+% contourf(radar.lon,radar.lat,model.Vr(:,:,temps));
+% colorbar
+% title('Projection du modele')
+% caxis(c);
+>>>>>>> Stashed changes
+
+% figure()
+% hold on
+% contourf(radar.lon,radar.lat,sqrt(model.interp_U(:,:,temps).^2+model.interp_V(:,:,temps).^2))
+% quiver(radar.lon,radar.lat,model.interp_U(:,:,temps),model.interp_V(:,:,temps),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+% hold off
+% title('interpolation du modele')
+% caxis(c)
 
 
-figure()
-hold on
-contourf(model.lon,model.lat,model.norm(:,:,temps));
-quiver(model.lon,model.lat,model.U(:,:,temps),model.V(:,:,temps),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
-hold off
-title('norme du modele')
-c=caxis;
-
-
+<<<<<<< Updated upstream
 figure()
 hold on
 contourf(shared.lon,shared.lat,sqrt(model.interp_U(:,:,temps).^2+model.interp_V(:,:,temps).^2))
@@ -62,3 +81,5 @@ quiver(shared.lon,shared.lat,model.interp_U(:,:,temps),model.interp_V(:,:,temps)
 hold off
 title('projection du modele')
 caxis(c)
+=======
+>>>>>>> Stashed changes
