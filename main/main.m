@@ -84,59 +84,35 @@ radar.Vr(i_lon)=NaN;
 
 [model,radar]=projection(model,radar);
 
-<<<<<<< Updated upstream
-temps=1;
 
-figure()
-contourf(radar.lon,radar.lat,radar.Vr(:,:,temps));
-colorbar
-c=caxis;
-title('Radar')
+temps=2;
 
-figure()
-contourf(radar.lon,radar.lat,model.Vr(:,:,temps));
-colorbar
-title('Projection du modele')
-caxis(c);
+% figure()
+% contourf(radar.lon,radar.lat,radar.Vr(:,:,temps));
+% colorbar
+% c=caxis;
+% title('Radar')
+
+% figure()
+% contourf(radar.lon,radar.lat,model.Vr(:,:,temps));
+% colorbar
+% title('Projection du modele')
+% caxis(c);
+
 
 figure()
 hold on
 contourf(model.lon,model.lat,model.norm(:,:,temps));
 quiver(model.lon,model.lat,model.U(:,:,temps),model.V(:,:,temps),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
 hold off
-=======
-
-
-
-
-% figure()
-% contourf(radar.lon,radar.lat,radar.Vr(:,:,1));
-% colorbar
-% c=caxis;
-% title('Radar')
-
-% figure()
-% contourf(radar.lon,radar.lat,model.Vr(:,:,1));
-% colorbar
-% title('Projection du modele')
-% caxis(c);
-
-figure(1)
-contourf(model.lon,model.lat,model.norm(:,:,1));
->>>>>>> Stashed changes
-colorbar
-title('Norme du modele')
-quiver(model.lon,model.lat,model.
+title('norme du modele')
 c=caxis;
 
-figure(2)
-contourf(radar.lon,radar.lat,sqrt(model.interp_U(:,:,1).^2 + model.interp_V(:,:,1).^2));
-colorbar
-title('Norme du modele interpolée')
-caxis(c);
 
 figure()
 hold on
 contourf(radar.lon,radar.lat,sqrt(model.interp_U(:,:,temps).^2+model.interp_V(:,:,temps).^2))
 quiver(radar.lon,radar.lat,model.interp_U(:,:,temps),model.interp_V(:,:,temps),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
 hold off
+title('projection du modele')
+caxis(c)
