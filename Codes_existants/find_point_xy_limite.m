@@ -10,7 +10,7 @@
 
 
 function[ir,jr]=find_point_xy_limite(nav_x,nav_y,x_d,y_d,max_range,max_dist_grid_drifter)
-
+%%%nav_x c'est radar et x_d c'est drifter
 %%% calcul de la difference de position entre flotteur et radar
 for n = 1 : length(x_d)
     
@@ -20,7 +20,7 @@ for n = 1 : length(x_d)
     
     dist=sqrt((nav_x-x1).^2+(nav_y-y1).^2);
     
-    if isnan(dist) == 0
+    if isnan(dist) == 0  %%si c'est un nombre 
         
         [ir(n),jr(n)]=find(dist==min(min(dist)));
        

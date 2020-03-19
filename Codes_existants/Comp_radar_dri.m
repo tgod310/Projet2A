@@ -1,5 +1,5 @@
 
-clear all
+clear
 close all 
 clc
 
@@ -74,7 +74,7 @@ i_station = 1;
     %%############################ 
     
     %% list of available drifters
-    path_drifter='/home/molcard/CODAR/PROJET2A/drifter/round1/';
+    path_drifter='/home/yann/Documents/Yann/Seatech/PROJET2A/Projet2A/round1_1';
     drifter_name=drifter_list(path_drifter);
 
     for i_drift=1: size(drifter_name.short,1)
@@ -304,7 +304,7 @@ i_station = 1;
         
  %       save('veldiff_ontraj.mat','-struct','interpolation.drifter')
 
-        pause
+     %   pause
 
     %% ######################################################### 
     %%% Correlation between radar and drifters
@@ -381,7 +381,7 @@ i_station = 1;
         
         
         
-        pause
+        %pause
         %% plot
         
         
@@ -407,7 +407,7 @@ i_station = 1;
 % %        export_fig(filename, '-jpeg', '-painters','-m2.5')
     end
      
-    pause
+   % pause
     
      %% 2/ Plot radar against drifter for all drifter
      
