@@ -44,7 +44,7 @@ for i=1:length(data_drifter.lat)
 
 %%%%%  Calcul deltaT %%%%%%% 
 
-    data_drifter.temps(i) = data_drifter.date(i+1)-date_drifter.date(i);
+    data_drifter.temps(i) = data_drifter.date(i+1)-data_drifter.date(i);
 
 %%%%% Calcul Vitesse %%%%%%% 
 

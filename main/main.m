@@ -17,7 +17,7 @@ shared.time_origin='2010-01-01 00:00:00';
 % Recuperation des donnees
 radar=read_RADAR('20190300001_20191002301_PEY_L1.nc');
 model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
-drifter=read_DRIFTER('033.xlsx');
+%drifter=read_DRIFTER('033.xlsx');
 
 
 % Uniformisation du temps
