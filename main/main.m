@@ -13,15 +13,19 @@ addpath('fonction')
 shared.time_origin='2010-01-01 00:00:00';
 
 %% Recuperation des donnees
+%%%Comparaison radar model%%%
 radar=read_RADAR('20190300001_20191002301_PEY_L1.nc');
 model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
-%drifter=read_DRIFTER('033.xlsx');
 
+%%%Comparaison drifter model%%%
+%drifter=read_DRIFTER('033.xlsx');
+%model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
 
 %% Uniformisation du temps
-shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calandrier julien
+shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
 radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar sur origine des temps
 model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
+%drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine des temps
 
 [model,radar,shared]=shared_time(model,radar,shared); % recupération des plages temps communes
 
