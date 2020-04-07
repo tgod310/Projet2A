@@ -77,8 +77,14 @@ title('Projection du modele')
 
 %% Comparaison
 shared.difference=(abs(model.Vr)-abs(radar.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
+shared.difference2=abs(abs(model.Vr)-abs(radar.interp_Vr));
 
 figure()
 contourf(shared.lon,shared.lat,shared.difference(:,:,jour))
 colorbar
 title('Comparaison entre radar et model')
+
+figure()
+contourf(shared.lon,shared.lat,shared.difference2(:,:,jour))
+colorbar
+title('Difference radar-modele')
