@@ -19,21 +19,20 @@ model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_2019052
 
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
-radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar sur origine des temps
+drifter.time=drifter.time+drifter.time_origin-shared.time_origin_julien; % temps drifter sur origine des temps
 model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
-%drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine des temps
 
-[model,radar,shared]=shared_time(model,radar,shared); % recupération des plages temps communes
+[model,drifter,shared]=shared_time(model,drifter,shared); % recupération des plages temps communes
 
 %% Uniformisation de l'espace
-[model,radar,shared]=shared_space(model,radar,shared); % recuperation des plages espace communes
+[model,drifter,shared]=shared_space(model,drifter,shared); % recuperation des plages espace communes
 
-[model,radar]=interpolation(model,radar,shared); % interpolation model sur espace et moyenne radar sur temps
-[model,radar]=projection(model,radar); % projection model sur radiale du radar
+[model,drifter]=interpolation(model,drifter,shared); % interpolation model sur espace et moyenne radar sur temps
+[model,drifter]=projection(model,drifter); % projection model sur radiale du radar
 
 %% Comparaison
-shared.difference=(abs(model.Vr)-abs(radar.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
-shared.difference2=abs(abs(model.Vr)-abs(radar.interp_Vr));
+shared.difference=(abs(model.Vr)-abs(drifter.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
+shared.difference2=abs(abs(model.Vr)-abs(drifter.interp_Vr));
 shared.difference2(shared.difference2>0.2)=NaN; % Suppression des valeurs trop importantes (> 0.2m/s)
 
 %% Affichage
@@ -41,7 +40,7 @@ jour=1; % choix du jour a afficher
 
 % Moyenne radar sur le jour
 figure(1)
-contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,jour));
+contourf(shared.lon,shared.lat,drifter.interp_Vr(:,:,jour));
 colorbar
 c=caxis;
 title('Moyenne radar par jour')
@@ -89,7 +88,7 @@ for i=1:length(shared.time)
     f=figure(7);
     f.WindowState='maximized';
     subplot(2,2,1)
-    contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,i));
+    contourf(shared.lon,shared.lat,drifter.interp_Vr(:,:,i));
     s=colorbar;
     c=caxis;
     s.Label.String='Vitesse radiale (m\cdot s^{-1})';

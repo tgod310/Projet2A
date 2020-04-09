@@ -22,6 +22,7 @@ DateString=strcat(annee,{'-'},mois,{'-'},jour,{' '},heure,{':'},minute,{':'},sec
 formatIn = 'yyyy-mm-dd HH:MM:SS'; 
 
 data_drifter.time = datenum(DateString,formatIn);
+data_drifter.time_origin=0;
 
 %%% Erreurs de mesures 
 %%% Si 2 mesures sont prises dans un intervalle inférieur à 10 secondes on
