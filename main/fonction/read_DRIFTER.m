@@ -46,29 +46,19 @@ data_drifter.lon = dd(:,10);
 
 %%% Calcul deltaX %%% 
 %%Formule de Haversine%%
-R = 6371;%rayon de la terre 
-delta_lat=zeros(1,length(data_drifter.lat)-1);
-delta_lon=zeros(1,length(data_drifter.lon)-1);
-data_drifter.distance=zeros(1,length(data_drifter.lon)-1);
 
 for i=1:(length(data_drifter.lat)-1)
-    delta_lat(i) = data_drifter.lat(i+1)-data_drifter.lat(i);
-    delta_lon(i) = data_drifter.lon(i+1)-data_drifter.lon(i);
 
-
-    a = sind(delta_lat(i)/2) * sind(delta_lat(i)/2) + cosd(data_drifter.lat(i)) * cosd(data_drifter.lat(i+1))*sind(delta_lon(i)/2) * sind(delta_lon(i)/2);
-    c = 2 * atan2(sqrt(a), sqrt(1-a));
-
-    data_drifter.distance(i) = R * c;
-
+    data_drifter.distanceX(i) = distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i),data_drifter.lon(i+1));
+    data_drifter.distanceY(i) = distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i+1),data_drifter.lon(i));
 %%%  Calcul deltaT %%% 
 
     data_drifter.temps(i) = data_drifter.time(i)-data_drifter.time(i+1);
 
 %%% Calcul Vitesse %%% 
 
-    data_drifter.vitesse(i) = (data_drifter.distance(i)/data_drifter.temps(i))*(1000/(24*3600));
-
+    data_drifter.vitesseU(i) = (data_drifter.distanceX(i)/data_drifter.temps(i))*(1000/(24*3600));
+    data_drifter.vitesseV(i) = (data_drifter.distanceY(i)/data_drifter.temps(i))*(1000/(24*3600));
 end
 
 

@@ -1,21 +1,22 @@
-function [model,radar,shared] = shared_space(model,radar,shared)
-radar.lat_min=min(min(radar.lat));
-radar.lat_max=max(max(radar.lat));
-radar.lon_min=min(min(radar.lon));
-radar.lon_max=max(max(radar.lon));
+function [model,drifter,shared] = shared_space(model,drifter,shared)
+drifter.lat_min=min(drifter.lat);
+drifter.lat_max=max(drifter.lat);
+drifter.lon_min=min(drifter.lon);
+drifter.lon_max=max(drifter.lon);
+
 model.lat_min=min(min(model.lat));
 model.lat_max=max(max(model.lat));
 model.lon_min=min(min(model.lon));
 model.lon_max=max(max(model.lon));
 
-[shared.lat_0,shared.lat_end]=crossed_data(radar.lat_min,radar.lat_max,model.lat_min,model.lat_max);
-[shared.lon_0,shared.lon_end]=crossed_data(radar.lon_min,radar.lon_max,model.lon_min,model.lon_max);
+[shared.lat_0,shared.lat_end]=crossed_data(drifter.lat_min,drifter.lat_max,model.lat_min,model.lat_max);
+[shared.lon_0,shared.lon_end]=crossed_data(drifter.lon_min,drifter.lon_max,model.lon_min,model.lon_max);
 
-i_lat=radar.lat<shared.lat_0 | radar.lat>shared.lat_end;
-i_lon=radar.lon<shared.lon_0 | radar.lon>shared.lon_end;
+i_lat=model.lat<shared.lat_0 | model.lat>shared.lat_end;
+i_lon=model.lon<shared.lon_0 | model.lon>shared.lon_end;
 
-shared.lon=radar.lon;
-shared.lat=radar.lat;
+shared.lon=model.lon;
+shared.lat=model.lat;
 shared.lon(i_lon)=NaN;
 shared.lat(i_lat)=NaN;
 end

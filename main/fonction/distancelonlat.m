@@ -9,7 +9,7 @@ R = 6371;%rayon de la terre
 
 
     a = sind(delta_lat/2) * sind(delta_lat/2) + cosd(lat1) * cosd(lat2)*sind(delta_lon/2) * sind(delta_lon/2);
-    c = 2 * atan2(sqrt(a), sqrt(1-a));
+    c = 2 * asin(sqrt(a));
 
     distance = R * c;
 end
