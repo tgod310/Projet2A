@@ -1,16 +1,16 @@
 function data_drifter = read_DRIFTER(name_file)
 % read_DRIFTER permet de lire et ouvrir les fichiers xlsx des drifters
 %donne la référence, le jour, la position et la vitesse du drifter 
-%%Lecture des données
+%% Lecture des données
 dd = readmatrix(name_file);
 
-%%Variable du numéro du drifter
+%% Variable du numéro du drifter
 ds=datastore(name_file);
 dv=read(ds);
 reference = dv(1,1);
 data_drifter.ref = reference;
 
-%%Variable de la date du drifter en jour julien
+%% Variable de la date du drifter en jour julien
 jour = num2str(dd(:,3));
 mois = num2str(dd(:,2));
 annee = num2str(dd(:,4));
@@ -22,25 +22,22 @@ DateString=strcat(annee,{'-'},mois,{'-'},jour,{' '},heure,{':'},minute,{':'},sec
 formatIn = 'yyyy-mm-dd HH:MM:SS'; 
 
 data_drifter.time = datenum(DateString,formatIn);
- 
 
-%%%Erreurs de mesures 
-%%%Si 2 mesures sont prises dans un intervalle inférieur à 10 secondes on
-%%%en enleve une
+%%% Erreurs de mesures 
+%%% Si 2 mesures sont prises dans un intervalle inférieur à 10 secondes on
+%%% en enleve une
+
 i=1;
 while i<length(data_drifter.time)
-
     if (data_drifter.time(i)-data_drifter.time(i+1)<(10/86400))
         data_drifter.time(i)=NaN;
-        
     end
     i=i+1;
 end
 
-%%Variables de la position du drifter
+%% Variables de la position du drifter
 data_drifter.lat = dd(:,9);
 data_drifter.lon = dd(:,10);
-
 
 %%%%%%%%%  Calcul vitesse %%%%%%%%%%%% 
 
