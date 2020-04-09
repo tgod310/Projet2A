@@ -30,6 +30,17 @@ drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine 
 %% Uniformisation de l'espace
 [model,drifter,shared]=shared_space(model,drifter,shared); % recuperation des plages espace communes
 
+%% Recherche du point le plus proche 
+
+%1)on prend le point du drifter
+%2)on regarde quel point est le plus proche 
+
+ 
+
+dist=distancelonlat(drifter.lat(2),drifter.lon(2),shared.lat,shared.lon);
+dist_min=min(min(dist));
+
+
 % [model,radar]=interpolation(model,radar,shared); % interpolation model sur espace et moyenne radar sur temps
 % [model,radar]=projection(model,radar); % projection model sur radiale du radar
 % 

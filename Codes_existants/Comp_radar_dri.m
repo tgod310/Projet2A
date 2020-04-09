@@ -75,7 +75,7 @@ i_station = 1;
     %%############################ 
     
     %% list of available drifters
-    path_drifter='../../drifter/round1';
+    path_drifter='..\..\round1';
     drifter_name=drifter_list(path_drifter);
 
     for i_drift=1: size(drifter_name.short,1)
