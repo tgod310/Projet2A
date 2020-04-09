@@ -40,6 +40,8 @@ end
 data_drifter.lat = dd(:,9);
 data_drifter.lon = dd(:,10);
 
+[data_drifter.Xlon,data_drifter.Ylat]=meshgrid(data_drifter.lon,data_drifter.lat);
+
 %%%%%%%%%  Calcul vitesse %%%%%%%%%%%% 
 
 %%% Calcul deltaX %%% 
@@ -48,6 +50,9 @@ R = 6371;%rayon de la terre
 delta_lat=zeros(1,length(data_drifter.lat)-1);
 delta_lon=zeros(1,length(data_drifter.lon)-1);
 data_drifter.distance=zeros(1,length(data_drifter.lon)-1);
+
+n=length(data_drifter.Xlon);
+%data_drifter.V=NaN(n,n,n);
 
 for i=1:(length(data_drifter.lat)-1)
     delta_lat(i) = data_drifter.lat(i+1)-data_drifter.lat(i);
@@ -66,9 +71,7 @@ for i=1:(length(data_drifter.lat)-1)
 %%% Calcul Vitesse %%% 
 
     data_drifter.vitesse(i) = (data_drifter.distance(i)/data_drifter.temps(i))*(1000/(24*3600));
-
+    
+    %data_drifter.V(data_drifter.Xlon==data_drifter.lon(i) & data_drifter.Ylat==data_drifter.lat(i))=data_drifter.vitesse(i);
 end
-
-
 end
-

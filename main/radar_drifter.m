@@ -14,25 +14,25 @@ shared.time_origin='2010-01-01 00:00:00';
 
 %% Recuperation des donnees
 %%%Comparaison drifter model%%%
+radar=read_RADAR('Radials_RUV_May19.nc');
 drifter=read_DRIFTER('033.xlsx');
-model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
 
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
 drifter.time=drifter.time+drifter.time_origin-shared.time_origin_julien; % temps drifter sur origine des temps
-model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
+radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar sur origine des temps
 
-[model,drifter,shared]=shared_time(model,drifter,shared); % recupération des plages temps communes
+[radar,drifter,shared]=shared_time(radar,drifter,shared); % recupération des plages temps communes
 
 %% Uniformisation de l'espace
-[model,drifter,shared]=shared_space(model,drifter,shared); % recuperation des plages espace communes
+[radar,drifter,shared]=shared_space(radar,drifter,shared); % recuperation des plages espace communes
 
-[model,drifter]=interpolation(model,drifter,shared); % interpolation model sur espace et moyenne radar sur temps
-[model,drifter]=projection(model,drifter); % projection model sur radiale du radar
+[radar,drifter]=interpolation(radar,drifter,shared); % interpolation model sur espace et moyenne radar sur temps
+[radar,drifter]=projection(radar,drifter); % projection model sur radiale du radar
 
 %% Comparaison
-shared.difference=(abs(model.Vr)-abs(drifter.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
-shared.difference2=abs(abs(model.Vr)-abs(drifter.interp_Vr));
+shared.difference=(abs(radar.Vr)-abs(drifter.interp_Vr)).^2/max(abs(radar.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
+shared.difference2=abs(abs(radar.Vr)-abs(drifter.interp_Vr));
 shared.difference2(shared.difference2>0.2)=NaN; % Suppression des valeurs trop importantes (> 0.2m/s)
 
 %% Affichage
@@ -48,8 +48,8 @@ title('Moyenne radar par jour')
 % Norme du Modele
 figure(2)
 hold on
-contourf(model.lon,model.lat,model.norm(:,:,jour));
-quiver(model.lon,model.lat,model.U(:,:,jour),model.V(:,:,jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+contourf(radar.lon,radar.lat,radar.norm(:,:,jour));
+quiver(radar.lon,radar.lat,radar.U(:,:,jour),radar.V(:,:,jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
 hold off
 colorbar
 caxis(c);
@@ -58,8 +58,8 @@ title('Norme du modele')
 % Interpolation du modele
 figure(3)
 hold on
-contourf(shared.lon,shared.lat,sqrt(model.interp_U(:,:,jour).^2+model.interp_V(:,:,jour).^2))
-quiver(shared.lon,shared.lat,model.interp_U(:,:,jour),model.interp_V(:,:,jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+contourf(shared.lon,shared.lat,sqrt(radar.interp_U(:,:,jour).^2+radar.interp_V(:,:,jour).^2))
+quiver(shared.lon,shared.lat,radar.interp_U(:,:,jour),radar.interp_V(:,:,jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
 hold off
 colorbar
 caxis(c)
@@ -67,7 +67,7 @@ title('Interpolation du modele')
 
 % Projection du modele
 figure(4)
-contourf(shared.lon,shared.lat,model.Vr(:,:,jour))
+contourf(shared.lon,shared.lat,radar.Vr(:,:,jour))
 colorbar
 caxis(c)
 title('Projection du modele')
@@ -95,7 +95,7 @@ for i=1:length(shared.time)
     title('Moyenne journaliere radar')
     
     subplot(2,2,2)
-    contourf(shared.lon,shared.lat,model.Vr(:,:,i))
+    contourf(shared.lon,shared.lat,radar.Vr(:,:,i))
     s=colorbar;
     caxis(c)
     s.Label.String='Vitesse radiale (m\cdot s^{-1})';
