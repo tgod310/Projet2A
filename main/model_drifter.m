@@ -25,20 +25,28 @@ shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en ca
 model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
 drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine des temps
 
-[model,drifter,shared]=shared_time(model,drifter,shared); % recupération des plages temps communes
+[model,drifter,shared]=shared_time_model_drifter(model,drifter,shared); % recupération des plages temps communes
 
 %% Uniformisation de l'espace
-[model,drifter,shared]=shared_space(model,drifter,shared); % recuperation des plages espace communes
+[model,drifter,shared]=shared_space_model_drifter(model,drifter,shared); % recuperation des plages espace communes
 
 %% Recherche du point le plus proche 
 
 %1)on prend le point du drifter
 %2)on regarde quel point est le plus proche 
-
- 
-
-dist=distancelonlat(drifter.lat(2),drifter.lon(2),shared.lat,shared.lon);
-dist_min=min(min(dist));
+%%liste des drifters qui sont dans le shared 
+dist_min=zeros(1,length(drifter.lat));
+%for i=1:length(drifter.lat) 
+   if drifter.lat(450)>shared.lat_0 && drifter.lat(450)<shared.lat_end && drifter.lon(450)>shared.lon_0 && drifter.lon(450)<shared.lon_end 
+        dist=distancelonlat(drifter.lat(450),drifter.lon(450),shared.lat,shared.lon);
+       
+        
+        [I,J]=find(dist==min(min(dist)));
+        
+        difference=abs(drifter.vitesseU(450)-model.U(I,J,1,1));
+        
+    end
+%end
 
 
 % [model,radar]=interpolation(model,radar,shared); % interpolation model sur espace et moyenne radar sur temps
