@@ -36,37 +36,45 @@ drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine 
 %2)on regarde quel point est le plus proche 
 %%liste des drifters qui sont dans le shared 
 dist_min=zeros(1,length(drifter.lat));
-%for i=1:length(drifter.lat) 
+diff_distance=zeros(1,length(drifter.lat));
+diff_temps=zeros(1,length(drifter.lat));
+model_vitesseU=zeros(1,length(drifter.lat));
+model_vitesseV=zeros(1,length(drifter.lat));
+diff_vitesseU=zeros(1,length(drifter.lat));
+
+
+
+for i=1:length(drifter.lat) 
 %Si le drifter est dans l'espace partagé
-   if drifter.lat(450)>shared.lat_0 && drifter.lat(450)<shared.lat_end && drifter.lon(450)>shared.lon_0 && drifter.lon(450)<shared.lon_end 
+   if drifter.lat(i)>shared.lat_0 && drifter.lat(i)<shared.lat_end && drifter.lon(i)>shared.lon_0 && drifter.lon(i)<shared.lon_end 
        %Si le drifter est dans le temps partagé
-       if drifter.time(450)>shared.time_0 && drifter.time(450)<shared.time_end
+       if drifter.time(i)>shared.time_0 && drifter.time(i)<shared.time_end
        
        %On calcule sa distance avec tous les points partagés du model 
-       dist=distancelonlat(drifter.lat(450),drifter.lon(450),shared.lat,shared.lon);
+       dist=distancelonlat(drifter.lat(i),drifter.lon(i),shared.lat,shared.lon);
        
         %I la longitude du point le plus proche J la latitude
-        diff_distance=min(min(dist));
+        diff_distance(i)=min(min(dist));
         [I,J]=find(dist==min(min(dist)));
        
         %On prend le meme jour
         
-            diff_temps=100; 
+            diff_temps(i)=100; 
             for k=1:length(model.time)
-                 b=abs(drifter.time(450)-model.time(k));
-                    if b<diff_temps 
-                     diff_temps=b;
+                 b=abs(drifter.time(i)-model.time(k));
+                    if b<diff_temps(i) 
+                     diff_temps(i)=b;
                      c=k;
                     end
    
             end
-        model_vitesseU=model.U(I,J,1,c);%le model commence le 9 mai avec une donnee par jour 
-        drifter_vitesseU=drifter.vitesseU(450);
-        diff_vitesse=abs(model_vitesseU-drifter_vitesseU);
+        model_vitesseU(i)=model.U(I,J,1,c);%le model commence le 9 mai avec une donnee par jour
+        model_vitesseV(i)=model.V(I,J,1,c);
+        
+        diff_vitesseU(i)=abs(model_vitesseU(i)-drifter.vitesseU(i));
         end
     end
-%end
-
+end
 
 %% Affichage
 %plot(drifter.vitesseU,'-o')
