@@ -33,8 +33,9 @@ drifter.U=drifter.vitesseU(i);
 drifter.V=drifter.vitesseV(i);
 drifter.lon=drifter.lon(i);
 drifter.lat=drifter.lat(i);
+drifter.time=drifter.time(i);
 
-[radar,drifter,shared]=closer_point(radar,drifter,shared);
+[radar,drifter]=closer_point(radar,drifter,shared);
 
 [radar,drifter]=interpolation(radar,drifter,shared); % interpolation model sur espace et moyenne radar sur temps
 [radar,drifter]=projection(radar,drifter); % projection model sur radiale du radar
