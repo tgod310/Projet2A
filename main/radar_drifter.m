@@ -27,6 +27,15 @@ radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar
 %% Uniformisation de l'espace
 [radar,drifter,shared]=shared_space(radar,drifter,shared); % recuperation des plages espace communes
 
+% On ne garde que les données drifter qui sont dans les plages communes
+i=drifter.lon>=shared.lon_0 & drifter.lon<=shared.lon_end & drifter.lat>=shared.lat_0 & drifter.lat<=shared.lat_end & drifter.time_min>=shared.time_0 & drifter.time_max<=shared.time_end;
+drifter.U=drifter.vitesseU(i);
+drifter.V=drifter.vitesseV(i);
+drifter.lon=drifter.lon(i);
+drifter.lat=drifter.lat(i);
+
+[radar,drifter,shared]=closer_point(radar,drifter,shared);
+
 [radar,drifter]=interpolation(radar,drifter,shared); % interpolation model sur espace et moyenne radar sur temps
 [radar,drifter]=projection(radar,drifter); % projection model sur radiale du radar
 

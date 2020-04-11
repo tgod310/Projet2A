@@ -24,7 +24,7 @@ model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_2019021
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
 radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar sur origine des temps
-model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
+model.time=model.time+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
 %drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine des temps
 
 [model,radar,shared]=shared_time(model,radar,shared); % recupération des plages temps communes
@@ -119,5 +119,5 @@ for i=1:length(shared.time)
     title('Difference radar-modele')
     
     sgtitle(datestr(shared.time(i)+shared.time_origin_julien))
-    pause(2);
+    pause(0.5);
 end

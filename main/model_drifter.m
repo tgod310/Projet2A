@@ -5,9 +5,9 @@
 clear;close all;clc;
 
 % Ajout du chemin des donnees etudiees Yann 
-addpath('..\..\round1','..\..\round2','..\..\NEMO')
+%addpath('..\..\round1','..\..\round2','..\..\NEMO')
 % Ajout du chemin des donnees etudiees Théo
-%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
 % Ajout du chemin des fonctions
 addpath('fonction')
 
@@ -22,7 +22,7 @@ model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_2019052
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
 
-model.time=model.time/(60*60*24)+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
+model.time=model.time+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
 drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine des temps
 
 [model,drifter,shared]=shared_time_model_drifter(model,drifter,shared); % recupération des plages temps communes
@@ -77,5 +77,5 @@ for i=1:length(drifter.lat)
 end
 
 %% Affichage
-%plot(drifter.vitesseU,'-o')
-%plot(model.U(91,11,1,:)
+% plot(drifter.vitesseU,'-o')
+% plot(model.U(91,11,1,:))

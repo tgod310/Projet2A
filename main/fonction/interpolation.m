@@ -16,4 +16,3 @@ for i=1:s
     radar.interp_Vr(:,:,i)=mean(radar.Vr(:,:,i_min:i_max),3,'omitnan'); % calcul de la moyenne de la vitesse du radar sur le jour etudie
 end
 end
-

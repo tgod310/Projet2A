@@ -21,4 +21,6 @@ data_RADAR.lat=ncread(name_file,'lat');
 data_RADAR.time=ncread(name_file,'time');
 data_RADAR.Vr=ncread(name_file,'v');
 data_RADAR.time_origin=datenum(ncreadatt(name_file,'time','time_origin'));
+
+data_RADAR.name='radar';
 end

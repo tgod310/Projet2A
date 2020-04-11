@@ -67,7 +67,6 @@ for i=1:(length(data_drifter.lat)-1)
 
     data_drifter.vitesseU(i) = (data_drifter.distanceX(i)/data_drifter.temps(i))*(1000/(24*3600));
     data_drifter.vitesseV(i) = (data_drifter.distanceY(i)/data_drifter.temps(i))*(1000/(24*3600));
-
-    %data_drifter.V(data_drifter.Xlon==data_drifter.lon(i) & data_drifter.Ylat==data_drifter.lat(i))=data_drifter.vitesse(i);
 end
+data_drifter.name='drifter';
 end
