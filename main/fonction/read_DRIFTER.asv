@@ -48,16 +48,17 @@ data_drifter.lon = dd(:,10);
 %%Formule de Haversine%%
 
 for i=1:(length(data_drifter.lat)-1)
-    if data_drifter.lon(i+1)<data_drifter.lon(i)
+    if data_drifter.lon(i+1)<drifter.lon(i)
     data_drifter.distanceX(i) = distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i),data_drifter.lon(i+1));
     else
     data_drifter.distanceX(i) = -distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i),data_drifter.lon(i+1));
     end
-    if data_drifter.lat(i+1)<data_drifter.lat(i)
+    if data_drifter.lat(i+1)<drifter.lat(i+1)
+    
        data_drifter.distanceY(i) = distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i+1),data_drifter.lon(i));
-    else
-       data_drifter.distanceY(i) = -distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i+1),data_drifter.lon(i));
-    end
+    %else
+     %  data_drifter.distanceY(i) = -distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i+1),data_drifter.lon(i));
+    %end
     
 %%%  Calcul deltaT %%% 
 

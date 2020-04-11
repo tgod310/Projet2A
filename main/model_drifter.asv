@@ -46,16 +46,15 @@ dist_min=zeros(1,length(drifter.lat));
        dist=distancelonlat(drifter.lat(450),drifter.lon(450),shared.lat,shared.lon);
        
         %I la longitude du point le plus proche J la latitude
-        diff_distance=min(min(dist));
         [I,J]=find(dist==min(min(dist)));
        
         %On prend le meme jour
         
-            diff_temps=100; 
+            a=100; 
             for k=1:length(model.time)
                  b=abs(drifter.time(450)-model.time(k));
-                    if b<diff_temps 
-                     diff_temps=b;
+                    if b<a 
+                     a=b;
                      c=k;
                     end
    

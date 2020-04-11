@@ -12,6 +12,7 @@ R = 6371;%rayon de la terre
     c = 2 * atan2(sqrt(a), sqrt(1-a));
 
     distance = R * c;
+    
 end
 
 
