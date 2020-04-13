@@ -16,5 +16,5 @@ data_MODEL.wind_V=ncread(name_file_V,'sometauy');
 data_MODEL.norm=sqrt(data_MODEL.U.^2+data_MODEL.V.^2);
 data_MODEL.time_origin=datenum(data_MODEL.info.Variables(4).Attributes(7).Value,'yyyy-mmm-dd HH:MM:SS');
 
-data_MODEL.name='model';
+data_MODEL.name='m';
 end

@@ -30,10 +30,10 @@ model.time=model.time+model.time_origin-shared.time_origin_julien; % temps model
 [model,radar,shared]=shared_time(model,radar,shared); % recupération des plages temps communes
 
 %% Uniformisation de l'espace
-[model,radar,shared]=shared_space(model,radar,shared); % recuperation des plages espace communes
+[radar,model,shared]=shared_space(radar,model,shared); % recuperation des plages espace communes
 
 [model,radar]=interpolation(model,radar,shared); % interpolation model sur espace et moyenne radar sur temps
-[model,radar]=projection(model,radar); % projection model sur radiale du radar
+model=projection(model,radar); % projection model sur radiale du radar
 
 %% Comparaison
 shared.difference=(abs(model.Vr)-abs(radar.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
