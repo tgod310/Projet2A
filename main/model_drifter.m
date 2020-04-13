@@ -2,7 +2,7 @@
 
 %% Initialisation
 % Nettoyage des donnees
-clear;close all;clc;
+clear;clc;
 
 % Ajout du chemin des donnees etudiees Yann 
 addpath('..\..\round1','..\..\round2','..\..\NEMO')
@@ -15,9 +15,10 @@ addpath('fonction')
 shared.time_origin='2010-01-01 00:00:00';
 
 %% Recuperation des donnees
- 
-    
-drifter=read_DRIFTER('051.xlsx');
+name_drifter = dir('..\..\round1');
+for j=3:length(name_drifter)
+   name_drifter(j).name
+drifter=read_DRIFTER(name_drifter(j).name);
 model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
 
 %% Uniformisation du temps
@@ -44,13 +45,13 @@ model_vitesseV=zeros(1,length(drifter.lat));
 diff_vitesseU=zeros(1,length(drifter.lat));
 diff_vitesseV=zeros(1,length(drifter.lat));
 
-
+T=[];
 for i=1:length(drifter.lat) 
 %Si le drifter est dans l'espace partagé
    if drifter.lat(i)>shared.lat_0 && drifter.lat(i)<shared.lat_end && drifter.lon(i)>shared.lon_0 && drifter.lon(i)<shared.lon_end 
        %Si le drifter est dans le temps partagé
        if drifter.time(i)>shared.time_0 && drifter.time(i)<shared.time_end
-       
+       T=[T i];
        %On calcule sa distance avec tous les points partagés du model 
        dist=distancelonlat(drifter.lat(i),drifter.lon(i),shared.lat,shared.lon);
        
@@ -96,9 +97,17 @@ Moyenne_distance=mean(diff_distance_1);
 Moyenne_vitesseU=mean(diff_vitesseU_1);
 Moyenne_vitesseV=mean(diff_vitesseV_1);
 %% Affichage
-plot(drifter.vitesseU,'o')
-title('Comparaison drifter bleu model rouge')
-ylabel('vitesse en m/s')
-hold on
-plot(model_vitesseU,'o')
-hold off
+if length(T)>1
+    plot(drifter.time(T(1):T(end)),drifter.vitesseU(T(1):T(end)),'o')
+    title(strcat('drifter ',name_drifter(j).name(1:3),' bleu NIDOR rouge'))
+    ylabel('vitesse en m/s')
+    str=datestr(drifter.time(T(1)));
+    str2=datestr(drifter.time(T(end)));
+    xlabel(strcat(str2,' | ',str))
+    hold on
+    plot(drifter.time(T(1):T(end)),model_vitesseU(T(1):T(end)),'ro')
+    hold off
+    pause(1.5)
+end
+end
+
