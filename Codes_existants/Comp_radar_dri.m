@@ -1,6 +1,6 @@
 
 clear
-close all 
+%close all 
 clc
 
 addpath('../../WERA','../../drifter/round1')
@@ -476,15 +476,15 @@ i_station = 1;
      
         %%% 4 Plot velocities along trajectories
         
-        for i_drift= 1: size(drifter_name.short,1)
-            figure
-            hold off
-            plot(interpolation.drifter(1,i_drift).VR,'r')
-            hold on
-            plot(interpolation.drifter(1,i_drift).VRradar,'b*')
-            title([ drifter_name.short(i_drift,12:15) drifter_name.short(i_drift,24:24)])
-            print([ 'POB' drifter_name.short(i_drift,12:15) drifter_name.short(i_drift,24:24) 'error'] ,'-djpeg')
-        end
+%         for i_drift= 1: size(drifter_name.short,1)
+%             figure
+%             hold off
+%             plot(interpolation.drifter(1,i_drift).VR,'r')
+%             hold on
+%             plot(interpolation.drifter(1,i_drift).VRradar,'b*')
+%             title([ drifter_name.short(i_drift,12:15) drifter_name.short(i_drift,24:24)])
+%             print([ 'POB' drifter_name.short(i_drift,12:15) drifter_name.short(i_drift,24:24) 'error'] ,'-djpeg')
+%         end
         
      
 
