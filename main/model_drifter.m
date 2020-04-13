@@ -15,7 +15,8 @@ addpath('fonction')
 shared.time_origin='2010-01-01 00:00:00';
 
 %% Recuperation des donnees
-
+ 
+    
 drifter=read_DRIFTER('051.xlsx');
 model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
 
@@ -41,7 +42,7 @@ diff_temps=zeros(1,length(drifter.lat));
 model_vitesseU=zeros(1,length(drifter.lat));
 model_vitesseV=zeros(1,length(drifter.lat));
 diff_vitesseU=zeros(1,length(drifter.lat));
-
+diff_vitesseV=zeros(1,length(drifter.lat));
 
 
 for i=1:length(drifter.lat) 
@@ -73,6 +74,8 @@ for i=1:length(drifter.lat)
         model_vitesseV(i)=model.V(I,J,1,c);
         
         diff_vitesseU(i)=abs(model_vitesseU(i)-drifter.vitesseU(i));
+        diff_vitesseV(i)=abs(model_vitesseV(i)-drifter.vitesseV(i));
+        
         end
     end
 end
@@ -84,12 +87,14 @@ for i=1:length(diff_distance)
         diff_distance_1(e)=diff_distance(i);
         diff_temps_1(e)=diff_temps(i);
         diff_vitesseU_1(e)=diff_vitesseU(i);
+        diff_vitesseV_1(e)=diff_vitesseV(i);
     end
     
 end
 Moyenne_temps= mean(diff_temps_1);
 Moyenne_distance=mean(diff_distance_1);
 Moyenne_vitesseU=mean(diff_vitesseU_1);
+Moyenne_vitesseV=mean(diff_vitesseV_1);
 %% Affichage
 plot(drifter.vitesseU,'o')
 title('Comparaison drifter bleu model rouge')
