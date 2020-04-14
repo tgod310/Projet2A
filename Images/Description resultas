@@ -1,0 +1,10 @@
+Comparaison radar drifter :
+	À peut près le même résultat que l'ancien programme avec cependant moins de points pour le radar car pas d'interpolation dans notre programme.
+	radar et drifter assez proches et suivent la même tendance mais le radar semble légèrement en retard. C'était déjà le cas sur l'ancien programme. Est-ce parce que ils ne sont pas sur la même heure UTC ?
+	Fait uniquement pour un seul drifter, boucle à faire
+	Stats à réaliser
+	
+
+Comparaison modèle radar :
+	Assez bons résultats : quasiment partout une différence inférieure à 20cm/s (on enlève les valeurs supérieur pour une échelle plus précise). Il y a cependant sur presque la moitier des données une zone dans laquelle différence supérieur ( entre 6 et 6.2E et 42.9 et 43N) Ainsi que dans les zones les plus éloignées, en particulier derrière les îles, ce qui est normale car le radar est perturbé.
+	
