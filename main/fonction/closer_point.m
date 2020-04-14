@@ -25,7 +25,7 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
         %% Point le plus proche temporellement        
         shared.delta_T(i)=100;
         for k=1:length(data.time)
-            b=abs(drifter.time(end-i)-data.time(k));
+            b=abs(drifter.time(i)-data.time(k));
             if b<shared.delta_T(i)
                 shared.delta_T(i)=b;
                 c=k;

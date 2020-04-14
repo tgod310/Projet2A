@@ -17,7 +17,7 @@ shared.time_origin='2010-01-01 00:00:00';
 %% Recuperation des donnees
 %%%Comparaison drifter model%%%
 radar=read_RADAR('Radials_RUV_May19.nc');
-drifter=read_DRIFTER('033.xlsx');
+drifter=read_DRIFTER('039.xlsx');
 
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
@@ -30,7 +30,10 @@ radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar
 [radar,drifter,shared]=shared_space(radar,drifter,shared); % recuperation des plages espace communes
 
 % On ne garde que les données drifter qui sont dans les plages communes
+i_min=drifter.time>=shared.time_0;
+i_max=drifter.time<=shared.time_end;
 i=drifter.lon>=shared.lon_0 & drifter.lon<=shared.lon_end & drifter.lat>=shared.lat_0 & drifter.lat<=shared.lat_end & drifter.time_min>=shared.time_0 & drifter.time_max<=shared.time_end;
+i=logical(i.*i_min.*i_max);
 drifter.U=drifter.vitesseU(i);
 drifter.V=drifter.vitesseV(i);
 drifter.lon=drifter.lon(i);
@@ -45,7 +48,7 @@ i_notNaN=not(isnan(shared.delta_Vr));
 
 mean_time=mean(shared.delta_T(i_notNaN));
 mean_dist=mean(shared.delta_D(i_notNaN));
-mean_U=mean(shared.delta_Vr(i_notNaN));
+mean_U=mean(shared.delta_Vr,'omitnan');
 
 %% Affichage
 figure()
