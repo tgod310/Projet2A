@@ -104,7 +104,10 @@ if length(T)>1
     hold on
     plot(drifter.time(T(1):T(end)),model_vitesseU(T(1):T(end)),'ro')
     hold off
-    pause
+    %savefig(strcat(name_drifter(j).name(1:3),'.fig'))
+   
 end
+[model2,drifter2,shared2] = closer_point(model,drifter,shared);
+pause
 end
 
