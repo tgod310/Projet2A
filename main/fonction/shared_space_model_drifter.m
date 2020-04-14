@@ -9,8 +9,8 @@ model.lat_max=max(max(model.lat));
 model.lon_min=min(min(model.lon));
 model.lon_max=max(max(model.lon));
 
-[shared.lat_0,shared.lat_end]=crossed_data(drifter.lat_min,drifter.lat_max,model.lat_min,model.lat_max);
-[shared.lon_0,shared.lon_end]=crossed_data(drifter.lon_min,drifter.lon_max,model.lon_min,model.lon_max);
+[shared.lat_0,shared.lat_end]=crossed_data_model_drifter(drifter.lat_min,drifter.lat_max,model.lat_min,model.lat_max);
+[shared.lon_0,shared.lon_end]=crossed_data_model_drifter(drifter.lon_min,drifter.lon_max,model.lon_min,model.lon_max);
 
 i_lat=model.lat<shared.lat_0 | model.lat>shared.lat_end;
 i_lon=model.lon<shared.lon_0 | model.lon>shared.lon_end;

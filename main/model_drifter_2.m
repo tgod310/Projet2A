@@ -42,12 +42,16 @@ model_vitesseV=zeros(1,s);
 diff_vitesseU=zeros(1,s);
 diff_vitesseV=zeros(1,s);
 
+% On ne garde que les données drifter qui sont dans les plages communes
+m=drifter.lon>shared.lon_0 & drifter.lon<shared.lon_end & drifter.lat>shared.lat_0 & drifter.lat<shared.lat_end & drifter.time>shared.time_0 & drifter.time<shared.time_end;
+drifter.U=drifter.vitesseU(m);
+drifter.V=drifter.vitesseV(m);
+drifter.lon=drifter.lon(m);
+drifter.lat=drifter.lat(m);
+drifter.time=drifter.time(m);
+
 T=[];
 for i=1:length(drifter.lat) 
-%Si le drifter est dans l'espace partagé
-   if drifter.lat(i)>shared.lat_0 && drifter.lat(i)<shared.lat_end && drifter.lon(i)>shared.lon_0 && drifter.lon(i)<shared.lon_end 
-       %Si le drifter est dans le temps partagé
-       if drifter.time(i)>shared.time_0 && drifter.time(i)<shared.time_end
        T=[T i];
        %On calcule sa distance avec tous les points partagés du model 
        dist=distancelonlat(drifter.lat(i),drifter.lon(i),shared.lat,shared.lon);
@@ -71,11 +75,9 @@ for i=1:length(drifter.lat)
         model_vitesseU(i)=model.U(I,J,1,c);%le model commence le 9 mai avec une donnee par jour
         model_vitesseV(i)=model.V(I,J,1,c);
         
-        diff_vitesseU(i)=abs(model_vitesseU(i)-drifter.vitesseU(i));
-        diff_vitesseV(i)=abs(model_vitesseV(i)-drifter.vitesseV(i));
+        diff_vitesseU(i)=abs(model_vitesseU(i)-drifter.U(i));
+        diff_vitesseV(i)=abs(model_vitesseV(i)-drifter.V(i));
         
-        end
-    end
 end
 %Calcul moyenne distance et temps
 e=0;
@@ -95,14 +97,14 @@ Moyenne_vitesseU=mean(diff_vitesseU_1);
 Moyenne_vitesseV=mean(diff_vitesseV_1);
 %% Affichage
 if length(T)>1
-    plot(drifter.time(T(1):T(end)),drifter.vitesseU(T(1):T(end)),'o')
+    plot(drifter.time,drifter.U(T(1):T(end)),'o')
     title(strcat('drifter ',name_drifter(j).name(1:3),' bleu NIDOR rouge'))
     ylabel('vitesse en m/s')
     str=datestr(drifter.time(T(1)));
     str2=datestr(drifter.time(T(end)));
     xlabel(strcat(str2,' | ',str))
     hold on
-    plot(drifter.time(T(1):T(end)),model_vitesseU(T(1):T(end)),'ro')
+    plot(drifter.time,model_vitesseU(T(1):T(end)),'ro')
     hold off
     pause
 end
