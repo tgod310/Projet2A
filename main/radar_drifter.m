@@ -17,7 +17,7 @@ shared.time_origin='2010-01-01 00:00:00';
 %% Recuperation des donnees
 %%%Comparaison drifter model%%%
 radar=read_RADAR('Radials_RUV_May19.nc');
-drifter=read_DRIFTER('039.xlsx');
+drifter=read_DRIFTER('033.xlsx');
 
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien

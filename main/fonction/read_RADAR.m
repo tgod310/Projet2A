@@ -32,7 +32,7 @@ catch
     data_RADAR.angle(q4)=90+data_RADAR.angle(q4);
 end
 
-data_RADAR.time=ncread(name_file,'time');
+data_RADAR.time=ncread(name_file,'time')-1/12;
 data_RADAR.Vr=ncread(name_file,'v');
 data_RADAR.time_origin=datenum(ncreadatt(name_file,'time','time_origin'));
 
