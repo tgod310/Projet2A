@@ -45,7 +45,6 @@ data_drifter.lon = dd(:,10);
 %%%%%%%%%  Calcul vitesse %%%%%%%%%%%% 
 
 %%% Calcul deltaX %%% 
-%%Formule de Haversine%%
 
 for i=1:(length(data_drifter.lat)-1)
     if data_drifter.lon(i+1)<data_drifter.lon(i)

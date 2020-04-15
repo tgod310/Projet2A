@@ -15,8 +15,8 @@ addpath('fonction')
 shared.time_origin='2010-01-01 00:00:00';
 
 %% Recuperation des donnees
-name_drifter = dir('..\..\round1');
-for j=3:length(name_drifter)
+name_drifter = dir('..\..\round1'); %% nom des fichiers
+for j=3:length(name_drifter)%% boucle sur tous les drifters
    name_drifter(j).name %pour voir ou on en est dans le calcul
 drifter=read_DRIFTER(name_drifter(j).name);
 model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');

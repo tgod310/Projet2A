@@ -1,8 +1,8 @@
 function [data,drifter,shared] = closer_point(data,drifter,shared)
-% 1)on prend le point du drifter
-% 2)on regarde quel point est le plus proche 
-    
-    %% Point le plus proche spatialement
+%retourne shared.delta_D, shared.delta_T,shared.delta_U,shared.delta_V,
+%data.closer_U, data.closer_V, data.closer_Vr
+
+%% Point le plus proche spatialement
     len=length(drifter.U);
 
     shared.delta_D=zeros(1,len);
@@ -32,14 +32,14 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
             end
         end
 
-        if data.name=='m'
-            data.closer_U(i)=data.U(I,J,1,c);
+        if data.name=='m' %si on a un model
+            data.closer_U(i)=data.U(I,J,1,c);%vitesse du model la plus proche du drifter
             data.closer_V(i)=data.V(I,J,1,c);
 
             shared.delta_U(i)=abs(data.closer_U(i)-drifter.U(i));
             shared.delta_V(i)=abs(data.closer_V(i)-drifter.U(i));
 
-        elseif data.name=='r'
+        elseif data.name=='r' % si on a un radar
             data.closer_Vr(i)=data.Vr(I,J,c);
             angle(i)=data.angle(I,J);
         end
