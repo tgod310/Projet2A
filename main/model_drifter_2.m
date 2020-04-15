@@ -106,7 +106,9 @@ if length(T)>1
     hold on
     plot(drifter.time,model_vitesseU(T(1):T(end)),'ro')
     hold off
-    pause
+    
 end
+[model2,drifter2,shared2] = closer_point(model,drifter,shared);
+pause
 end
 

@@ -3,16 +3,16 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
 % 2)on regarde quel point est le plus proche 
     
     %% Point le plus proche spatialement
-    l=length(drifter.U);
+    len=length(drifter.U);
 
-    shared.delta_D=zeros(1,l);
+    shared.delta_D=zeros(1,len);
     drifter.closer_lon=shared.delta_D;
     drifter.closer_lat=shared.delta_D;
     shared.delta_T=shared.delta_D;
     data.closer_Vr=shared.delta_D;
     angle=shared.delta_D;
 
-    for i=1:l
+    for i=1:len
         % On calcule sa distance avec tous les points partagés du model 
         dist=distancelonlat(drifter.lat(i),drifter.lon(i),shared.lat,shared.lon);
 
@@ -43,9 +43,14 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
             data.closer_Vr(i)=data.Vr(I,J,c);
             angle(i)=data.angle(I,J);
         end
+    
     end
+    if data.name=='r'
     data.angle=angle;
     drifter=projection(drifter,data);
     shared.delta_Vr=abs(data.closer_Vr-drifter.Vr);
+    end 
+    
 end
+
 
