@@ -1,8 +1,8 @@
 function [data,drifter,shared] = closer_point(data,drifter,shared)
-% 1)on prend le point du drifter
-% 2)on regarde quel point est le plus proche 
-    
-    %% Point le plus proche spatialement
+%retourne shared.delta_D, shared.delta_T,shared.delta_U,shared.delta_V,
+%data.closer_U, data.closer_V, data.closer_Vr
+
+%% Point le plus proche spatialement
     len=length(drifter.U);
     
     % Initialisation de vecteurs nuls

@@ -1,6 +1,7 @@
 function [data1,data2,shared] = shared_space(data1,data2,shared)
-
-% Recuperation des extremums
+%retourne les 4 coins de l'espace partagé : shared.lat_0,
+%shared.lat_end,shared.lon_0,shared.lon_end, et une grille de l'espace
+%partagé basée sur data1
 data1.lat_min=min(min(data1.lat));
 data1.lat_max=max(max(data1.lat));
 data1.lon_min=min(min(data1.lon));
