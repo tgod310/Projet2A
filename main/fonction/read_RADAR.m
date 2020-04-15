@@ -16,6 +16,8 @@ data_RADAR.lon0=7.3271;  % Origin of the radial grid, longitude [decimal deg]
 data_RADAR.lon=ncread(name_file,'lon');
 data_RADAR.lat=ncread(name_file,'lat');
 
+% Certains fichiers radar n'ont pas de variable donnant l'angle de la
+% radiale en tout point. Si c'est le cas on la creee
 try
     data_RADAR.angle=ncread(name_file,'ang');
 catch

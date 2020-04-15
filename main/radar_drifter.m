@@ -33,17 +33,17 @@ radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar
 i_min=drifter.time>=shared.time_0;
 i_max=drifter.time<=shared.time_end;
 i=drifter.lon>=shared.lon_0 & drifter.lon<=shared.lon_end & drifter.lat>=shared.lat_0 & drifter.lat<=shared.lat_end & drifter.time_min>=shared.time_0 & drifter.time_max<=shared.time_end;
-i=logical(i.*i_min.*i_max);
+i=logical(i.*i_min.*i_max); % Indice de toutes les données qui sont dans les plages communes spatiales et temporelles
+
 drifter.U=drifter.vitesseU(i);
 drifter.V=drifter.vitesseV(i);
 drifter.lon=drifter.lon(i);
 drifter.lat=drifter.lat(i);
 drifter.time=drifter.time(i);
 
-[radar,drifter,shared]=closer_point(radar,drifter,shared);
+[radar,drifter,shared]=closer_point(radar,drifter,shared); % Recherche des points les plus proches spatialement et temporellement
 
 % Calcul moyenne distance et temps
-
 i_notNaN=not(isnan(shared.delta_Vr));
 
 mean_time=mean(shared.delta_T(i_notNaN));
