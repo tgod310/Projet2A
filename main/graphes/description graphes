@@ -1,0 +1,20 @@
+graphe radar-drifter :
+	radar : Radials_RUV_May19.nc
+	-> période du 01 mai au 16 juin 2019
+	-> pas de temps de 1h
+	-> pas d'interpolation temporelle
+	-> pas d'interpolation spatiale
+	
+	drifter : round1/033.xlsx
+
+graphe radar-model :
+	modèle : 1_NIDOR_20190202_20190215_grid_U et
+		1_NIDOR_20190202_20190215_grid_V
+	-> 15 février 2019
+	-> pas de temps d'une journée
+	-> interpolation sur la grille du radar
+	
+	radar : 20190300001_20191002301_PEY_L1
+	-> 15 février 2019
+	-> pas de temps d'1h
+	-> calcul de la moyenne journalière

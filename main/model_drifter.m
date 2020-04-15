@@ -5,9 +5,9 @@
 clear;clc;
 
 % Ajout du chemin des donnees etudiees Yann 
-addpath('..\..\round1','..\..\round2','..\..\NEMO')
+%addpath('..\..\round1','..\..\round2','..\..\NEMO')
 % Ajout du chemin des donnees etudiees Théo
-%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
 % Ajout du chemin des fonctions
 addpath('fonction')
 
@@ -43,13 +43,14 @@ drifter.lat=drifter.lat(m);
 drifter.time=drifter.time(m);
        
         
-      [model,drifter,shared] = closer_point(model,drifter,shared);
+[model,drifter,shared] = closer_point(model,drifter,shared);
         
 Moyenne_temps= mean(shared.delta_T);
 Moyenne_distance=mean(shared.delta_D);
 
 %% Affichage
 if length(m)>1
+    figure()
     plot(drifter.time,drifter.U,'o')
     title(strcat('drifter ',name_drifter(j).name(1:3),' bleu NIDOR rouge'))
     ylabel('vitesse en m/s')
