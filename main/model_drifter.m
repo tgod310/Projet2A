@@ -48,6 +48,14 @@ drifter.time=drifter.time(m);
 Moyenne_temps= mean(shared.delta_T);
 Moyenne_distance=mean(shared.delta_D);
 
+%% Spectre en fréquence 
+
+Y = fft(drifter.U);
+P2 = abs(Y/length(Y));
+P1 = P2(1:L/2+1);
+
+pas_de_temps=(drifter.time(1)-drifter.time(end))/length(drifter.time); % en jour 
+f = Fs*(0:(L/2))/L;
 %% Affichage
 if length(m)>1
     plot(drifter.time,drifter.U,'o')
