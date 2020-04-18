@@ -51,13 +51,22 @@ Moyenne_distance=mean(shared.delta_D);
 %% Spectre en fréquence 
 
 Y = fft(drifter.U);
-P2 = abs(Y/length(Y));
+L=length(drifter.U);
+P2 = abs(Y/L);
 P1 = P2(1:L/2+1);
+P1(2:end-1) = 2*P1(2:end-1);
 
-pas_de_temps=(drifter.time(1)-drifter.time(end))/length(drifter.time); % en jour 
+T=(drifter.time(1)-drifter.time(end))/length(drifter.time); % en jour 
+Fs=1/T;
 f = Fs*(0:(L/2))/L;
+figure(1)
+plot(f,P1) 
+title('Single-Sided Amplitude Spectrum of X(t)')
+xlabel('f (Hz)')
+ylabel('|P1(f)|')
 %% Affichage
 if length(m)>1
+    figure(2)
     plot(drifter.time,drifter.U,'o')
     title(strcat('drifter ',name_drifter(j).name(1:3),' bleu NIDOR rouge'))
     ylabel('vitesse en m/s')

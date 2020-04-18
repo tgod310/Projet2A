@@ -18,10 +18,14 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
 
         % I la longitude du point le plus proche J la latitude
         shared.delta_D(i)=min(min(dist));
-        [drifter.closer_lon(i),drifter.closer_lat(i)]=find(dist==min(min(dist)));
-        I=drifter.closer_lon(i);
-        J=drifter.closer_lat(i);
+%         [drifter.closer_lon(i),drifter.closer_lat(i)]=find(dist==min(min(dist)));
+%         I=drifter.closer_lon(i);
+%         J=drifter.closer_lat(i);
 
+        [I,J]=find(dist==min(min(dist)));
+        I=min(I);
+        J=min(J);
+        
         %% Point le plus proche temporellement        
         shared.delta_T(i)=100;
         for k=1:length(data.time)
