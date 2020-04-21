@@ -21,11 +21,15 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
 
         % I la longitude du point le plus proche J la latitude
         shared.delta_D(i)=min(min(dist));
-        [drifter.closer_lon(i),drifter.closer_lat(i)]=find(dist==min(min(dist)));
-        I=drifter.closer_lon(i);
-        J=drifter.closer_lat(i);
+%         [drifter.closer_lon(i),drifter.closer_lat(i)]=find(dist==min(min(dist)));
+%         I=drifter.closer_lon(i);
+%         J=drifter.closer_lat(i);
 
-        %% Point le plus proche temporellement
+        [I,J]=find(dist==min(min(dist)));
+        I=min(I);
+        J=min(J);
+        
+        %% Point le plus proche temporellement        
         shared.delta_T(i)=100;
         for k=1:length(data.time)
             b=abs(drifter.time(i)-data.time(k));
@@ -34,13 +38,10 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
                 c=k;
             end
         end
-        
-        %% Comparaison avec modele ou radar
-        % On utilise pas tout a fait les memes variables entre le modele et
-        % le radar donc on ne realise pas tout a fait les memes operations
-        if data.name=='m' % Si modele
-            data.closer_U(i)=data.U(I,J,1,c);
-            data.closer_V(i)=data.V(I,J,1,c);
+
+        if data.name=='m' %si on a un model
+            data.closer_U(i)=data.U(I,J,1,c);%vitesse du model la plus proche du drifter
+            data.closer_V(i)=data.V(I,J,1,c);%lon,lat,depth,time
 
             shared.delta_U(i)=abs(data.closer_U(i)-drifter.U(i));
             shared.delta_V(i)=abs(data.closer_V(i)-drifter.U(i));
