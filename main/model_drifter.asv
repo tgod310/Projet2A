@@ -59,8 +59,7 @@ P1(2:end-1) = 2*P1(2:end-1);
 T=(drifter.time(1)-drifter.time(end))/length(drifter.time); % en jour 
 Fs=1/T;
 f = Fs*(0:(L/2))/L;
-Pmax=P1(2:end);
-Max= find(max(Pmax)); 
+Max= max(P1); 
 figure(1)
 plot(f,P1) 
 title('Single-Sided Amplitude Spectrum of X(t)')
