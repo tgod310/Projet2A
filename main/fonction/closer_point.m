@@ -38,7 +38,7 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
 
         if data.name=='m' %si on a un model
             data.closer_U(i)=data.U(I,J,1,c);%vitesse du model la plus proche du drifter
-            data.closer_V(i)=data.V(I,J,1,c);
+            data.closer_V(i)=data.V(I,J,1,c);%lon,lat,depth,time
 
             shared.delta_U(i)=abs(data.closer_U(i)-drifter.U(i));
             shared.delta_V(i)=abs(data.closer_V(i)-drifter.U(i));
