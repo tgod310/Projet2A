@@ -101,7 +101,7 @@ for i=2:length(shared.time)-1
     subplot(2,2,1)
     hold on
     contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,i));
-    contour(shared.lon,shared.lat,model.Vr(:,:,i),'ShowText','on','LineColor','k','LineWidth',2)
+    contour(shared.lon,shared.lat,model.Vr(:,:,i),'ShowText','on','LineColor','k','LineWidth',)
     s=colorbar;
     c=caxis;
     s.Label.String='Vitesse radiale (m\cdot s^{-1})';
@@ -111,7 +111,7 @@ for i=2:length(shared.time)-1
     subplot(2,2,2)
     hold on
     contourf(shared.lon,shared.lat,model.Vr(:,:,i))
-    contour(shared.lon,shared.lat,radar.interp_Vr(:,:,i),'ShowText','on','LineColor','k','LineWidth',2)
+    contour(shared.lon,shared.lat,radar.interp_Vr(:,:,i),'ShowText','on','LineColor','k')
     s=colorbar;
     caxis(c)
     s.Label.String='Vitesse radiale (m\cdot s^{-1})';

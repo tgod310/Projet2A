@@ -6,6 +6,10 @@ clear;
 close all;
 clc;
 
+% Constantes
+UTC2=1/12;
+
+
 % Ajout du chemin des donnees etudiees
 addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
 % Ajout du chemin des fonctions

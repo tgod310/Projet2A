@@ -6,4 +6,3 @@ function data = projection(data,radar)
         data.Vr=data.U.*cosd(radar.angle)+data.V.*sind(radar.angle);
     end
 end
-

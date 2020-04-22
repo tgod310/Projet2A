@@ -2,7 +2,7 @@ function [distance] = distancelonlat(lat1,lon1,lat2,lon2)
 % Retourne la distance en km entre deux points à partir de leur latitude et
 % longitude
 %% Formule de Haversine %%
-    R = 6371;%rayon de la terre 
+    R = 6371; % Rayon de la terre 
 
     delta_lat = lat2-lat1;
     delta_lon = lon2-lon1;
