@@ -1,90 +1,79 @@
 %% -- MAIN -- %%
 
-%% Initialisation
-% Nettoyage des donnees
+%% Initialization
+% Cleaning data
 clear;clc;close all;
 
-% Ajout du chemin des donnees etudiees Yann 
-%addpath('..\..\round1','..\..\round2','..\..\NEMO')
-% Ajout du chemin des donnees etudiees Théo
-addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
-% Ajout du chemin des fonctions
+% Add data path  Yann 
+addpath('..\..\round1','..\..\round2','..\..\NEMO')
+% Add data path Théo
+%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+% Add data path fonctions
 addpath('fonction')
 
-% Origine des temps
+% Time Origin
 shared.time_origin='2010-01-01 00:00:00';
 
-%% Recuperation des donnees
-name_drifter = dir('..\..\round1'); %% nom des fichiers
-for j=3:length(name_drifter)%% boucle sur tous les drifters
-   name_drifter(j).name %pour voir ou on en est dans le calcul
+%% Read data 
+cd ..\..\round1
+name_drifter = dir('*.xlsx*'); %% files name
+cd ..\..\SeaTech\Projet2A\main
+for j=1:length(name_drifter)%% loop on all drifters 
+   name_drifter(j).name % to see the steps 
 drifter=read_DRIFTER(name_drifter(j).name);
 model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
 
-%% Uniformisation du temps
-shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
+%% Shared time
+shared.time_origin_julien=datenum(shared.time_origin); % time origin in julian calendar 
 
-model.time=model.time+model.time_origin; % temps model sur origine des temps
-drifter.time=drifter.time; %temps drifter sur origine des temps
+model.time=model.time+model.time_origin; 
 
-[drifter,model,shared]=shared_time(drifter,model,shared); % recupération des plages temps communes
+[drifter,model,shared]=shared_time(drifter,model,shared); 
 
-%% Uniformisation de l'espace
-[model,drifter,shared]=shared_space(model,drifter,shared); % recuperation des plages espace communes
+%% Shared space
+[model,drifter,shared]=shared_space(model,drifter,shared); 
 
-%% Recherche du point le plus proche 
+%% Closer point
 
-% On ne garde que les données drifter qui sont dans les plages communes
-m=drifter.lon>shared.lon_0 & drifter.lon<shared.lon_end & drifter.lat>shared.lat_0 & drifter.lat<shared.lat_end & drifter.time>shared.time_0 & drifter.time<shared.time_end;
-drifter.U=drifter.vitesseU(m);
-drifter.V=drifter.vitesseV(m);
-drifter.lon=drifter.lon(m);
-drifter.lat=drifter.lat(m);
-drifter.time=drifter.time(m);
+% Keeping only shared data 
+shared.i_shared=drifter.lon>shared.lon_0 & drifter.lon<shared.lon_end & drifter.lat>shared.lat_0 & drifter.lat<shared.lat_end & drifter.time>shared.time_0 & drifter.time<shared.time_end;
+drifter.U=drifter.vitesseU(shared.i_shared);
+drifter.V=drifter.vitesseV(shared.i_shared);
+drifter.lon=drifter.lon(shared.i_shared);
+drifter.lat=drifter.lat(shared.i_shared);
+drifter.time=drifter.time(shared.i_shared);
        
         
 [model,drifter,shared] = closer_point(model,drifter,shared);
         
-Moyenne_temps= mean(shared.delta_T);
-Moyenne_distance=mean(shared.delta_D);
+shared.mean_time= mean(shared.delta_T);
+shared.mean_distance=mean(shared.delta_D);
 
-%% Affichage
+%% Display
 
-
-
-%% Spectre en fréquence 
-if length(m)>1
-Y = fft(drifter.U);
-L=length(drifter.U);
-P2 = abs(Y/L);
-P1 = P2(1:L/2+1);
-P1(2:end-1) = 2*P1(2:end-1);
-
-T=(drifter.time(1)-drifter.time(end))/length(drifter.time); % en jour 
-Fs=1/T;
-f = Fs*(0:(L/2))/L;
-i_Max= find(P1(2:end)==max(P1(2:end)));
-F_max=f(i_Max+1);
-F_maxheures=F_max*24;
-
-figure(1)
-plot(f,P1) 
-str1=num2str(F_maxheures);
-title(strcat('F_maxheures=',str1))
-xlabel('f (Hz)')
-ylabel('|P1(f)|')
-
-    figure(2)
-    plot(drifter.time,drifter.U,'o')
-    title(strcat('drifter ',name_drifter(j).name(1:3),' bleu NIDOR rouge'))
-    ylabel('vitesse en m/s')
-    str=datestr(drifter.time(1));
-    str2=datestr(drifter.time(end));
-    xlabel(strcat(str2,' | ',str))
-    hold on
-    plot(drifter.time,model.closer_U,'ro')
-    hold off
+%% Frequency spectrum
+if length(shared.i_shared)>1
     
+    [drifter.f,drifter.P1,drifter.f_inertial]=spectre_drifter(drifter);
+    
+    %%%Display frequency spectrum 
+    figure(1)
+    plot(drifter.f,drifter.P1) 
+    title(strcat('Frequence inertielle = ',num2str(drifter.f_inertial)))
+    xlabel('f (Hz)')
+    ylabel('|P1(f)|')
+
+    %%% Display speed drifter and model
+    figure(2)
+    hold on
+    plot(drifter.time,drifter.U,'o')
+    plot(drifter.time,model.closer_U,'ro')
+    title(strcat('Comparaison model drifter ',name_drifter(j).name(1:3)))
+    ylabel('vitesse en m/s')
+    datetick('x','mmm-dd-hh','keepticks')
+    legend('drifter','radar')
+    hold off
+
 end
 pause
 end

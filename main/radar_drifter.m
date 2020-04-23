@@ -1,66 +1,78 @@
 %% -- MAIN -- %%
 
-%% Initialisation
-% Nettoyage des donnees
+%% Initialization
+% Cleaning data
 clear;
 close all;
 clc;
 
-% Constantes
-UTC2=1/12;
+% Constant
+Const.UTC2=1/12;
 
-
-% Ajout du chemin des donnees etudiees
-addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
-% Ajout du chemin des fonctions
+% Add data path  Yann 
+addpath('..\..\round1','..\..\round2','..\..\WERA')
+% Add data path Theo
+%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+% Add path fonctions
 addpath('fonction')
 
-% Origine des temps
+% Time origin
 shared.time_origin='2010-01-01 00:00:00';
 
-%% Recuperation des donnees
-%%%Comparaison drifter model%%%
-radar=read_RADAR('Radials_RUV_May19.nc');
-drifter=read_DRIFTER('033.xlsx');
+%% Read Data
+cd ..\..\round1
+name_drifter = dir('*.xlsx*'); %% files name
+cd ..\..\SeaTech\Projet2A\main
+for j=1:length(name_drifter)%% loop on all drifters 
+   name_drifter(j).name % to see the steps 
+drifter=read_DRIFTER(name_drifter(j).name);
+radar=read_RADAR('Radials_RUV_May19.nc',Const);
 
-%% Uniformisation du temps
-shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
-drifter.time=drifter.time+drifter.time_origin-shared.time_origin_julien; % temps drifter sur origine des temps
-radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar sur origine des temps
 
-[radar,drifter,shared]=shared_time(radar,drifter,shared); % recupération des plages temps communes
+%% Shared time
 
-%% Uniformisation de l'espace
-[radar,drifter,shared]=shared_space(radar,drifter,shared); % recuperation des plages espace communes
+shared.time_origin_julien=datenum(shared.time_origin); % time origin in julian calendar
+drifter.time=drifter.time+drifter.time_origin-shared.time_origin_julien; 
+radar.time=radar.time+radar.time_origin-shared.time_origin_julien; 
 
-% On ne garde que les données drifter qui sont dans les plages communes
-i_min=drifter.time>=shared.time_0;
-i_max=drifter.time<=shared.time_end;
-i=drifter.lon>=shared.lon_0 & drifter.lon<=shared.lon_end & drifter.lat>=shared.lat_0 & drifter.lat<=shared.lat_end & drifter.time_min>=shared.time_0 & drifter.time_max<=shared.time_end;
-i=logical(i.*i_min.*i_max); % Indice de toutes les données qui sont dans les plages communes spatiales et temporelles
+[radar,drifter,shared]=shared_time(radar,drifter,shared); 
 
-drifter.U=drifter.vitesseU(i);
-drifter.V=drifter.vitesseV(i);
-drifter.lon=drifter.lon(i);
-drifter.lat=drifter.lat(i);
-drifter.time=drifter.time(i);
+%% Shared space
+[radar,drifter,shared]=shared_space(radar,drifter,shared); 
 
-[radar,drifter,shared]=closer_point(radar,drifter,shared); % Recherche des points les plus proches spatialement et temporellement
+%% Closer point
 
-% Calcul moyenne distance et temps
-i_notNaN=not(isnan(shared.delta_Vr));
+% Keeping shared data 
+shared.i_min=drifter.time>=shared.time_0;
+shared.i_max=drifter.time<=shared.time_end;
+shared.i=drifter.lon>=shared.lon_0 & drifter.lon<=shared.lon_end & drifter.lat>=shared.lat_0 & drifter.lat<=shared.lat_end & drifter.time_min>=shared.time_0 & drifter.time_max<=shared.time_end;
+shared.i=logical(shared.i.*shared.i_min.*shared.i_max); % Indice of shared data 
 
-mean_time=mean(shared.delta_T(i_notNaN));
-mean_dist=mean(shared.delta_D(i_notNaN));
-mean_U=mean(shared.delta_Vr,'omitnan');
+drifter.U=drifter.vitesseU(shared.i);
+drifter.V=drifter.vitesseV(shared.i);
+drifter.lon=drifter.lon(shared.i);
+drifter.lat=drifter.lat(shared.i);
+drifter.time=drifter.time(shared.i);
+
+
+[radar,drifter,shared]=closer_point(radar,drifter,shared); % searching for closer point
+
+% Means
+shared.i_notNaN=not(isnan(shared.delta_Vr));
+
+shared.mean_time=mean(shared.delta_T(shared.i_notNaN));
+shared.mean_dist=mean(shared.delta_D(shared.i_notNaN));
+shared.mean_delta_U=mean(shared.delta_Vr,'omitnan');
 
 %% Affichage
 figure()
 hold on
-p=plot(drifter.time,drifter.Vr,'r');
+plot(drifter.time,drifter.Vr,'r');
 plot(drifter.time,radar.closer_Vr,'xb')
 title('Comparaison radar drifter')
 ylabel('vitesse en m/s')
 datetick('x','mmm-dd-hh','keepticks')
 legend('drifter','radar')
 hold off
+pause 
+end
