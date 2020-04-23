@@ -1,4 +1,4 @@
-function data_RADAR = read_RADAR(name_file)
+function data_RADAR = read_RADAR(name_file,Const)
 % read_RADAR permet de lire et ouvrir un fichier netcdf de données radar.
 %   Il prend en argument le nom du fichier radar à ouvir
 %   Il renvoie un struct contenant les données du fichier netcdf
@@ -16,6 +16,8 @@ data_RADAR.lon0=7.3271;  % Origin of the radial grid, longitude [decimal deg]
 data_RADAR.lon=ncread(name_file,'lon');
 data_RADAR.lat=ncread(name_file,'lat');
 
+% Certains fichiers radar n'ont pas de variable donnant l'angle de la
+% radiale en tout point. Si c'est le cas on la creee
 try
     data_RADAR.angle=ncread(name_file,'ang');
 catch
@@ -32,7 +34,7 @@ catch
     data_RADAR.angle(q4)=90+data_RADAR.angle(q4);
 end
 
-data_RADAR.time=ncread(name_file,'time');
+data_RADAR.time=ncread(name_file,'time')-Const.UTC2;
 data_RADAR.Vr=ncread(name_file,'v');
 data_RADAR.time_origin=datenum(ncreadatt(name_file,'time','time_origin'));
 

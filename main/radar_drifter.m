@@ -6,6 +6,10 @@ clear;
 close all;
 clc;
 
+% Constantes
+UTC2=1/12;
+
+
 % Ajout du chemin des donnees etudiees
 addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
 % Ajout du chemin des fonctions
@@ -17,7 +21,7 @@ shared.time_origin='2010-01-01 00:00:00';
 %% Recuperation des donnees
 %%%Comparaison drifter model%%%
 radar=read_RADAR('Radials_RUV_May19.nc');
-drifter=read_DRIFTER('039.xlsx');
+drifter=read_DRIFTER('033.xlsx');
 
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
@@ -33,17 +37,17 @@ radar.time=radar.time+radar.time_origin-shared.time_origin_julien; % temps radar
 i_min=drifter.time>=shared.time_0;
 i_max=drifter.time<=shared.time_end;
 i=drifter.lon>=shared.lon_0 & drifter.lon<=shared.lon_end & drifter.lat>=shared.lat_0 & drifter.lat<=shared.lat_end & drifter.time_min>=shared.time_0 & drifter.time_max<=shared.time_end;
-i=logical(i.*i_min.*i_max);
+i=logical(i.*i_min.*i_max); % Indice de toutes les données qui sont dans les plages communes spatiales et temporelles
+
 drifter.U=drifter.vitesseU(i);
 drifter.V=drifter.vitesseV(i);
 drifter.lon=drifter.lon(i);
 drifter.lat=drifter.lat(i);
 drifter.time=drifter.time(i);
 
-[radar,drifter,shared]=closer_point(radar,drifter,shared);
+[radar,drifter,shared]=closer_point(radar,drifter,shared); % Recherche des points les plus proches spatialement et temporellement
 
 % Calcul moyenne distance et temps
-
 i_notNaN=not(isnan(shared.delta_Vr));
 
 mean_time=mean(shared.delta_T(i_notNaN));
