@@ -5,9 +5,9 @@
 clear;close all;clc;
 
 % Ajout du chemin des donnees etudiees
-addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
 %Ajout chemin Yann 
-%addpath('..\..\NEMO','..\..\WERA');
+addpath('..\..\NEMO','..\..\WERA');
 % Ajout du chemin des fonctions
 addpath('fonction')
 

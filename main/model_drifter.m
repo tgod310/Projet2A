@@ -2,7 +2,7 @@
 
 %% Initialisation
 % Nettoyage des donnees
-clear;clc;
+clear;clc;close all;
 
 % Ajout du chemin des donnees etudiees Yann 
 addpath('..\..\round1','..\..\round2','..\..\NEMO')
@@ -24,8 +24,8 @@ model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_2019052
 %% Uniformisation du temps
 shared.time_origin_julien=datenum(shared.time_origin); % origine des temps en calendrier julien
 
-model.time=model.time+model.time_origin-shared.time_origin_julien; % temps model sur origine des temps
-drifter.time=drifter.time-shared.time_origin_julien; %temps drifter sur origine des temps
+model.time=model.time+model.time_origin; % temps model sur origine des temps
+drifter.time=drifter.time; %temps drifter sur origine des temps
 
 [drifter,model,shared]=shared_time(drifter,model,shared); % recupération des plages temps communes
 
@@ -48,8 +48,12 @@ drifter.time=drifter.time(m);
 Moyenne_temps= mean(shared.delta_T);
 Moyenne_distance=mean(shared.delta_D);
 
-%% Spectre en fréquence 
+%% Affichage
 
+
+
+%% Spectre en fréquence 
+if length(m)>1
 Y = fft(drifter.U);
 L=length(drifter.U);
 P2 = abs(Y/L);
@@ -59,15 +63,17 @@ P1(2:end-1) = 2*P1(2:end-1);
 T=(drifter.time(1)-drifter.time(end))/length(drifter.time); % en jour 
 Fs=1/T;
 f = Fs*(0:(L/2))/L;
-Pmax=P1(2:end);
-Max= find(max(Pmax)); 
+i_Max= find(P1(2:end)==max(P1(2:end)));
+F_max=f(i_Max+1);
+F_maxheures=F_max*24;
+
 figure(1)
 plot(f,P1) 
-title('Single-Sided Amplitude Spectrum of X(t)')
+str1=num2str(F_maxheures);
+title(strcat('F_maxheures=',str1))
 xlabel('f (Hz)')
 ylabel('|P1(f)|')
-%% Affichage
-if length(m)>1
+
     figure(2)
     plot(drifter.time,drifter.U,'o')
     title(strcat('drifter ',name_drifter(j).name(1:3),' bleu NIDOR rouge'))

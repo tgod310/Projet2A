@@ -8,7 +8,7 @@ function [distance] = distancelonlat(lat1,lon1,lat2,lon2)
     delta_lon = lon2-lon1;
 
     a = sind(delta_lat/2).* sind(delta_lat/2) + cosd(lat1).* cosd(lat2).*sind(delta_lon/2).* sind(delta_lon/2); 
-    c = 2 * atan2(sqrt(a), sqrt(1-a));
+    c = 2 * asin(sqrt(a));
 
     distance = R * c;
 end
