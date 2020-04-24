@@ -1,7 +1,7 @@
 function [data_0,data_end] = crossed_data(data1_min,data1_max,data2_min,data2_max)
-% cree une plage commune de données
+% create common data range 
 if data1_min > data2_max || data1_max < data2_min
-    disp("Les donnees a comparer n'ont pas de plages communes");
+    disp("No common data range");
     data_0=0;
     data_end=1;
 elseif data1_max > data2_min && data1_max < data2_max

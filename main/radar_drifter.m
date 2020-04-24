@@ -8,11 +8,14 @@ clc;
 
 % Constant
 Const.UTC2=1/12;
+Const.R = 6371; % earth radius km 
 
 % Add data path  Yann 
 addpath('..\..\round1','..\..\round2','..\..\WERA')
+drifter.path_drifter = '..\..\round1';
 % Add data path Theo
 %addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+%drifter.path_drifter = '../../drifter/round1';
 % Add path fonctions
 addpath('fonction')
 
@@ -20,12 +23,10 @@ addpath('fonction')
 shared.time_origin='2010-01-01 00:00:00';
 
 %% Read Data
-cd ..\..\round1
-name_drifter = dir('*.xlsx*'); %% files name
-cd ..\..\SeaTech\Projet2A\main
+name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
 for j=1:length(name_drifter)%% loop on all drifters 
-   name_drifter(j).name % to see the steps 
-drifter=read_DRIFTER(name_drifter(j).name);
+   disp(name_drifter(j).name) % to see the steps 
+drifter=read_DRIFTER(name_drifter(j).name,Const);
 radar=read_RADAR('Radials_RUV_May19.nc',Const);
 
 
@@ -55,7 +56,7 @@ drifter.lat=drifter.lat(shared.i);
 drifter.time=drifter.time(shared.i);
 
 
-[radar,drifter,shared]=closer_point(radar,drifter,shared); % searching for closer point
+[radar,drifter,shared]=closer_point(radar,drifter,shared,Const); % searching for closer point
 
 % Means
 shared.i_notNaN=not(isnan(shared.delta_Vr));
@@ -64,15 +65,21 @@ shared.mean_time=mean(shared.delta_T(shared.i_notNaN));
 shared.mean_dist=mean(shared.delta_D(shared.i_notNaN));
 shared.mean_delta_U=mean(shared.delta_Vr,'omitnan');
 
-%% Affichage
-figure()
-hold on
-plot(drifter.time,drifter.Vr,'r');
-plot(drifter.time,radar.closer_Vr,'xb')
-title('Comparaison radar drifter')
-ylabel('vitesse en m/s')
-datetick('x','mmm-dd-hh','keepticks')
-legend('drifter','radar')
-hold off
-pause 
+%% Display
+if length(shared.i)>1 %no error in case of no space and time shared  
+
+    figure()
+    hold on
+    plot(drifter.time,drifter.Vr,'r');
+    plot(drifter.time,radar.closer_Vr,'xb')
+    title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
+    ylabel('vitesse en m/s')
+    datetick('x','mmm-dd-hh','keepticks')
+    legend('drifter','radar')
+    hold off
+    pause 
 end
+end 
+
+
+

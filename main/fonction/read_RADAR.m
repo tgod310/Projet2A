@@ -21,8 +21,8 @@ data_RADAR.lat=ncread(name_file,'lat');
 try
     data_RADAR.angle=ncread(name_file,'ang');
 catch
-    dist_lon=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat,data_RADAR.lon0)*1000;
-    dist_lat=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat0,data_RADAR.lon)*1000;
+    dist_lon=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat,data_RADAR.lon0,Const)*1000;
+    dist_lat=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat0,data_RADAR.lon,Const)*1000;
     data_RADAR.angle=atan2d(dist_lat,dist_lon);
     q1=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat<data_RADAR.lat0;
     q2=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat>=data_RADAR.lat0;

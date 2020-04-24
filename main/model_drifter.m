@@ -4,10 +4,15 @@
 % Cleaning data
 clear;clc;close all;
 
+%Constant
+Const.R = 6371; % earth radius km 
+
 % Add data path  Yann 
 addpath('..\..\round1','..\..\round2','..\..\NEMO')
+drifter.path_drifter = '..\..\round1';
 % Add data path Théo
 %addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+%drifter.path_drifter = '../../drifter/round1';
 % Add data path fonctions
 addpath('fonction')
 
@@ -15,12 +20,10 @@ addpath('fonction')
 shared.time_origin='2010-01-01 00:00:00';
 
 %% Read data 
-cd ..\..\round1
-name_drifter = dir('*.xlsx*'); %% files name
-cd ..\..\SeaTech\Projet2A\main
+name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
 for j=1:length(name_drifter)%% loop on all drifters 
-   name_drifter(j).name % to see the steps 
-drifter=read_DRIFTER(name_drifter(j).name);
+   disp(name_drifter(j).name) % to see the steps 
+drifter=read_DRIFTER(name_drifter(j).name,Const);
 model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
 
 %% Shared time
@@ -44,7 +47,7 @@ drifter.lat=drifter.lat(shared.i_shared);
 drifter.time=drifter.time(shared.i_shared);
        
         
-[model,drifter,shared] = closer_point(model,drifter,shared);
+[model,drifter,shared] = closer_point(model,drifter,shared,Const);
         
 shared.mean_time= mean(shared.delta_T);
 shared.mean_distance=mean(shared.delta_D);

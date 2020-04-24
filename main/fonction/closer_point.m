@@ -1,11 +1,11 @@
-function [data,drifter,shared] = closer_point(data,drifter,shared)
+function [data,drifter,shared] = closer_point(data,drifter,shared,Const)
 %retourne shared.delta_D, shared.delta_T,shared.delta_U,shared.delta_V,
 %data.closer_U, data.closer_V, data.closer_Vr
 
-%% Point le plus proche spatialement
+%% Closer point in space
     len=length(drifter.U);
     
-    % Initialisation de vecteurs nuls
+    % Initialization
     shared.delta_D=zeros(1,len);
     drifter.closer_lon=shared.delta_D;
     drifter.closer_lat=shared.delta_D;
@@ -13,13 +13,13 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
     data.closer_Vr=shared.delta_D;
     angle=shared.delta_D;
 
-    %% Boucle prenant chaque point du drifter et enregistrant le point le plus proche
+    %% Loop taking each point of drifter and saving closer point
     for i=1:len
-        %% Point le plus proche spatialement
-        % On calcule sa distance avec tous les points partagés du model 
-        dist=distancelonlat(drifter.lat(i),drifter.lon(i),shared.lat,shared.lon);
+        %% Closer point in space
+        % Calculation distance with shared model 
+        dist=distancelonlat(drifter.lat(i),drifter.lon(i),shared.lat,shared.lon,Const);
 
-        % I la longitude du point le plus proche J la latitude
+        % I longitude of closer point J latitude
         shared.delta_D(i)=min(min(dist));
 %         [drifter.closer_lon(i),drifter.closer_lat(i)]=find(dist==min(min(dist)));
 %         I=drifter.closer_lon(i);
@@ -29,7 +29,7 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
         I=min(I);
         J=min(J);
         
-        %% Point le plus proche temporellement        
+        %% Closer point in time        
         shared.delta_T(i)=100;
         for k=1:length(data.time)
             b=abs(drifter.time(i)-data.time(k));
@@ -39,20 +39,20 @@ function [data,drifter,shared] = closer_point(data,drifter,shared)
             end
         end
 
-        if data.name=='m' %si on a un model
-            data.closer_U(i)=data.U(I,J,1,c);%vitesse du model la plus proche du drifter
+        if data.name=='m' %if it is with model
+            data.closer_U(i)=data.U(I,J,1,c);%model speed 
             data.closer_V(i)=data.V(I,J,1,c);%lon,lat,depth,time
 
             shared.delta_U(i)=abs(data.closer_U(i)-drifter.U(i));
             shared.delta_V(i)=abs(data.closer_V(i)-drifter.U(i));
 
-        elseif data.name=='r' % Si radar
+        elseif data.name=='r' % ifit is with radar
             data.closer_Vr(i)=data.Vr(I,J,c);
             angle(i)=data.angle(I,J);
         end
     end
     
-    if data.name=='r' % Si radar
+    if data.name=='r' 
         data.angle=angle;
         drifter=projection(drifter,data);
         shared.delta_Vr=abs(data.closer_Vr-drifter.Vr);

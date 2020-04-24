@@ -1,8 +1,8 @@
 function data = projection(data,radar)
-% projection : realise la projection de U et V sur le rayon du radar
-    if data.name=='m' % Si modele
+% projection : U and V projection on radar radius
+    if data.name=='m' % If model
         data.Vr=data.interp_U.*cosd(radar.angle)+data.interp_V.*sind(radar.angle);
-    elseif data.name=='d' % Si drifter
+    elseif data.name=='d' % If drifter
         data.Vr=data.U.*cosd(radar.angle)+data.V.*sind(radar.angle);
     end
 end
