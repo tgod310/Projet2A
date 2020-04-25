@@ -49,6 +49,10 @@ drifter.lon=drifter.lon(shared.i_shared);
 drifter.lat=drifter.lat(shared.i_shared);
 drifter.time=drifter.time(shared.i_shared);
        
+%%%filter spikes%%%
+drifter=filter_spike(drifter,model);
+
+
         
 [model,drifter,shared] = closer_point(model,drifter,shared,Const);
         
@@ -59,8 +63,6 @@ shared.mean_distance=mean(shared.delta_D);
 
 %% Frequency spectrum
 if length(drifter.U)>1
-    
-    close all;
     
     [drifter.f,drifter.P1,drifter.f_inertial]=spectrum_drifter(drifter,Const);
     
@@ -81,9 +83,9 @@ if length(drifter.U)>1
     datetick('x','mmm-dd-hh','keepticks')
     legend('drifter','radar')
     hold off
-
+    pause
 end
-pause
+
 
 end
 

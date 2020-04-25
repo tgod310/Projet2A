@@ -1,8 +1,9 @@
 function [f,P1,F_maxheures] = spectrum_drifter(drifter,Const)
 %spectrum
-
-    Y = fft(drifter.U);
-    L=length(drifter.U);
+    drifter.i_notNaN=not(isnan(drifter.U));
+    drifter.Unotnan=drifter.U(drifter.i_notNaN);
+    Y = fft(drifter.Unotnan);
+    L=length(drifter.Unotnan);
     P2 = abs(Y/L);
     P1 = P2(1:fix(L/2)+1);
     P1(2:end-1) = 2*P1(2:end-1);

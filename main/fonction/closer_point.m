@@ -46,7 +46,7 @@ function [data,drifter,shared] = closer_point(data,drifter,shared,Const)
             shared.delta_U(i)=abs(data.closer_U(i)-drifter.U(i));
             shared.delta_V(i)=abs(data.closer_V(i)-drifter.U(i));
 
-        elseif data.name=='r' % ifit is with radar
+        elseif data.name=='r' % if it is with radar
             data.closer_Vr(i)=data.Vr(I,J,c);
             angle(i)=data.angle(I,J);
         end

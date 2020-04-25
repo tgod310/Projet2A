@@ -61,6 +61,9 @@ drifter.time=drifter.time(shared.i);
 
 [radar,drifter,shared]=closer_point(radar,drifter,shared,Const); % searching for closer point
 
+%%%filter spikes%%%
+drifter=filter_spike(drifter,radar);
+
 % Means
 shared.i_notNaN=not(isnan(shared.delta_Vr));
 
@@ -69,18 +72,18 @@ shared.mean_dist=mean(shared.delta_D(shared.i_notNaN));
 shared.mean_delta_U=mean(shared.delta_Vr,'omitnan');
 
 %% Display
-if length(shared.i)>1 %no error in case of no space and time shared  
+if length(drifter.U)>1 %no error in case of no space and time shared  
 
     figure()
     hold on
-    plot(drifter.time,drifter.Vr,'r');
+    plot(drifter.time,drifter.Vr,'ro');
     plot(drifter.time,radar.closer_Vr,'xb')
     title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
     ylabel('vitesse en m/s')
     datetick('x','mmm-dd-hh','keepticks')
     legend('drifter','radar')
     hold off
-    pause 
+    pause
 end
 end 
 
