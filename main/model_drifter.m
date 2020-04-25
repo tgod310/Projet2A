@@ -6,6 +6,9 @@ clear;clc;close all;
 
 %Constant
 Const.R = 6371; % earth radius km 
+Const.d2s = 86400;% day in sec
+Const.km2m = 1000; %km in m 
+Const.d2h = 24; % day in hour 
 
 % Add data path  Yann 
 addpath('..\..\round1','..\..\round2','..\..\NEMO')
@@ -24,7 +27,7 @@ name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
 for j=1:length(name_drifter)%% loop on all drifters 
    disp(name_drifter(j).name) % to see the steps 
 drifter=read_DRIFTER(name_drifter(j).name,Const);
-model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
+model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc',Const);
 
 %% Shared time
 shared.time_origin_julien=datenum(shared.time_origin); % time origin in julian calendar 
@@ -55,9 +58,11 @@ shared.mean_distance=mean(shared.delta_D);
 %% Display
 
 %% Frequency spectrum
-if length(shared.i_shared)>1
+if length(drifter.U)>1
     
-    [drifter.f,drifter.P1,drifter.f_inertial]=spectre_drifter(drifter);
+    close all;
+    
+    [drifter.f,drifter.P1,drifter.f_inertial]=spectrum_drifter(drifter,Const);
     
     %%%Display frequency spectrum 
     figure(1)
@@ -79,5 +84,6 @@ if length(shared.i_shared)>1
 
 end
 pause
+
 end
 

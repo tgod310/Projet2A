@@ -1,13 +1,13 @@
-function data_MODEL = read_MODEL(name_file_U,name_file_V)
-% read_MODEL permet de lire et ouvrir les fichiers netcdf de données de modeles.
-%   Il prend en argument le nom des fichier d'un modele à ouvir
-%   Il renvoie un struct contenant les données du fichier netcdf avec les composantes U et V ainsi que la norme des deux
+function data_MODEL = read_MODEL(name_file_U,name_file_V,Const)
+% read_MODEL read  netcdf files of model data
+%   INPUT : file's name
+%   OUTPUT : struct ( U,V, norm)
 
 data_MODEL.info=ncinfo(name_file_U);
 data_MODEL.lon=ncread(name_file_U,'nav_lon');
 data_MODEL.lat=ncread(name_file_U,'nav_lat');
 data_MODEL.depth=ncread(name_file_U,'depthu');
-data_MODEL.time=(ncread(name_file_U,'time_counter'))/(60*60*24);
+data_MODEL.time=(ncread(name_file_U,'time_counter'))/(Const.d2s);
 data_MODEL.time_counter_bnds=ncread(name_file_U,'time_counter_bnds');
 data_MODEL.U=ncread(name_file_U,'vozocrtx');
 data_MODEL.V=ncread(name_file_V,'vomecrty');

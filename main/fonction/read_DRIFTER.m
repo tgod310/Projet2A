@@ -29,7 +29,7 @@ data_drifter.time_origin=0;
 
 i=1;
 while i<length(data_drifter.time)
-    if (data_drifter.time(i)-data_drifter.time(i+1)<(10/86400))
+    if (data_drifter.time(i)-data_drifter.time(i+1)<(90/Const.d2s))
         data_drifter.time(i)=NaN;
     end
     i=i+1;
@@ -41,9 +41,9 @@ data_drifter.lon = dd(:,10);
 
 [data_drifter.Xlon,data_drifter.Ylat]=meshgrid(data_drifter.lon,data_drifter.lat);
 
-%%%%%%%%%  Calcul vitesse %%%%%%%%%%%% 
+%%%%%%%%%  Speed %%%%%%%%%%%% 
 
-%%% Calcul deltaX %%% 
+%%% deltaX %%% 
 
 for i=1:(length(data_drifter.lat)-1)
     if data_drifter.lon(i+1)<data_drifter.lon(i)
@@ -57,14 +57,17 @@ for i=1:(length(data_drifter.lat)-1)
        data_drifter.distanceY(i) = -distancelonlat(data_drifter.lat(i),data_drifter.lon(i),data_drifter.lat(i+1),data_drifter.lon(i),Const);
     end
     
-%%%  Calcul deltaT %%% 
+%%%  deltaT %%% 
 
     data_drifter.temps(i) = data_drifter.time(i)-data_drifter.time(i+1);
 
-%%% Calcul Vitesse %%% 
+%%% Speed %%% 
 
-    data_drifter.vitesseU(i) = (data_drifter.distanceX(i)/data_drifter.temps(i))*(1000/(24*3600));
-    data_drifter.vitesseV(i) = (data_drifter.distanceY(i)/data_drifter.temps(i))*(1000/(24*3600));
+    data_drifter.vitesseU(i) = (data_drifter.distanceX(i)/data_drifter.temps(i))*(Const.km2m/(Const.d2s));
+    data_drifter.vitesseV(i) = (data_drifter.distanceY(i)/data_drifter.temps(i))*(Const.km2m/(Const.d2s));
+    
+    
 end
+     
 data_drifter.name='d';
 end

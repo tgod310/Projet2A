@@ -9,6 +9,9 @@ clc;
 % Constant
 Const.UTC2=1/12;
 Const.R = 6371; % earth radius km 
+Const.d2s = 86400; %day in sec
+Const.km2m = 1000; %km in m 
+Const.d2h = 24; % day in hour
 
 % Add data path  Yann 
 addpath('..\..\round1','..\..\round2','..\..\WERA')
