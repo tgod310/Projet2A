@@ -1,5 +1,6 @@
 function [f,P1,F_maxheures] = spectrum_drifter(drifter,Const)
 %spectrum
+
     drifter.i_notNaN=not(isnan(drifter.U));
     drifter.Unotnan=drifter.U(drifter.i_notNaN);
     Y = fft(drifter.Unotnan);

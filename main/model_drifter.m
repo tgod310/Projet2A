@@ -76,7 +76,7 @@ if length(drifter.U)>1
     %%% Display speed drifter and model
     figure(2)
     hold on
-    plot(drifter.time,drifter.U,'o')
+    plot(drifter.time,drifter.U,'bo')
     plot(drifter.time,model.closer_U,'ro')
     title(strcat('Comparaison model drifter ',name_drifter(j).name(1:3)))
     ylabel('vitesse en m/s')
