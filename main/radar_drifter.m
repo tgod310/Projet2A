@@ -25,11 +25,18 @@ addpath('fonction')
 % Time origin
 shared.time_origin='2010-01-01 00:00:00';
 
+% Statistics 
+
+stat.vr_rad_alldrift=[];
+stat.vr_drift_alldrift=[];
+
+
 %% Read Data
 name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
-for j=1:length(name_drifter)%% loop on all drifters 
-   disp(name_drifter(j).name) % to see the steps 
-drifter=read_DRIFTER(name_drifter(j).name,Const);
+%for j=1:length(name_drifter)%% loop on all drifters 
+   %disp(name_drifter(j).name) % to see the steps 
+%drifter=read_DRIFTER(name_drifter(j).name,Const);
+drifter=read_DRIFTER('984.xlsx',Const);
 radar=read_RADAR('Radials_RUV_May19.nc',Const);
 
 
@@ -61,15 +68,13 @@ drifter.time=drifter.time(shared.i);
 
 [radar,drifter,shared]=closer_point(radar,drifter,shared,Const); % searching for closer point
 
-%%%filter spikes%%%
+%% Filter spikes
 [drifter,radar]=filter_spike(drifter,radar);
 
-% Means
-shared.i_notNaN=not(isnan(shared.delta_Vr));
+%% Statistics
 
-shared.mean_time=mean(shared.delta_T(shared.i_notNaN));
-shared.mean_dist=mean(shared.delta_D(shared.i_notNaN));
-shared.mean_delta_U=mean(shared.delta_Vr,'omitnan');
+[stat,shared]=statistic(drifter,radar,shared,stat);
+
 
 %% Display
 if length(drifter.U)>1 %no error in case of no space and time shared  
@@ -78,14 +83,14 @@ if length(drifter.U)>1 %no error in case of no space and time shared
     hold on
     plot(drifter.time,drifter.Vr,'bo');
     plot(drifter.time,radar.closer_Vr,'rx')
-    title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
+%    title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
     ylabel('vitesse en m/s')
     datetick('x','mmm-dd-hh','keepticks')
     legend('drifter','radar')
     hold off
-    pause
+    pause(1)
 end
-end 
+%end 
 
 
 

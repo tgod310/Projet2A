@@ -9,11 +9,24 @@ for i=1:length(drifter.U)-1
          if abs(drifter.V(i)-drifter.V(i+1))> 0.2
          drifter.V(i)=NaN;
          end
-         if data.name=='r'
-            if abs(drifter.Vr(i)-drifter.Vr(i+1))> 0.2
-            drifter.Vr(i)=NaN;
-            end
-         end
+         
+          if abs(drifter.Vr(i)-drifter.Vr(i+1))> 0.2
+               drifter.Vr(i)=NaN;
+          end
+          if isnan(drifter.Vr(i))==0 && isnan(drifter.Vr(i+1))==1   % if k is not NaN and k+1 is NaN
+                    a=i;
+                    while isnan(drifter.Vr(i+1))==1 && i<length(drifter.Vr)-1 %while NaN 
+                        i=i+1;
+                    end
+                    if abs(drifter.Vr(a)-drifter.Vr(i+1))>0.35
+                        while drifter.Vr(i+1)==drifter.Vr(i+2)
+                            drifter.Vr(i+1)=NaN;
+                            i=i+1;
+                        end
+                        drifter.Vr(i+1)=NaN;
+                    end    
+           end
+         
 end 
 
 if data.name=='r' 
