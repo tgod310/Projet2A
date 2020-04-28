@@ -33,6 +33,8 @@ catch
     data_RADAR.angle(q4)=90+data_RADAR.angle(q4);
 end
 
+%[d,data_RADAR.angle2,az_rx]=dist_angle();
+
 data_RADAR.time=ncread(name_file,'time')-Const.UTC2;
 data_RADAR.Vr=ncread(name_file,'v');
 data_RADAR.time_origin=datenum(ncreadatt(name_file,'time','time_origin'));

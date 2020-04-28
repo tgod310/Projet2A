@@ -19,8 +19,15 @@ shared.time_origin='2010-01-01 00:00:00';
 
 %% Recuperation des donnees
 %%%Comparaison radar model%%%
-radar=read_RADAR('20190300001_20191002301_PEY_L1.nc',Const);
-model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
+%radar=read_RADAR('20190300001_20191002301_PEY_L1.nc',Const);
+%radar=read_RADAR('20190300001_20191002301_POB_L1.nc',Const);
+radar=read_RADAR('Radials_RUV_May19.nc',Const);
+
+%model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
+%model=read_MODEL('GLAZUR64_20190202_20190215_grid_U.nc','GLAZUR64_20190202_20190215_grid_V.nc');
+%model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
+model=read_MODEL('GLAZUR64_20190511_20190524_grid_U.nc','GLAZUR64_20190511_20190524_grid_V.nc');
+
 
 %%%Comparaison drifter model%%%
 %drifter=read_DRIFTER('033.xlsx');
