@@ -4,8 +4,8 @@
 % Nettoyage des donnees
 clear;close all;clc;
 
-%% Configuration des constantes
-CONFIG
+% Constantes
+Const.UTC2=1/12;
 
 % Ajout du chemin des donnees etudiees
 addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
@@ -26,7 +26,7 @@ radar=read_RADAR('Radials_RUV_May19.nc',Const);
 %model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
 %model=read_MODEL('GLAZUR64_20190202_20190215_grid_U.nc','GLAZUR64_20190202_20190215_grid_V.nc');
 %model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
-model=read_MODEL('GLAZUR64_20190511_20190524_grid_U.nc','GLAZUR64_20190511_20190524_grid_V.nc',Const);
+model=read_MODEL('GLAZUR64_20190511_20190524_grid_U.nc','GLAZUR64_20190511_20190524_grid_V.nc');
 
 
 %%%Comparaison drifter model%%%
