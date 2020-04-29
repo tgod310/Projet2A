@@ -34,9 +34,9 @@ stat.vr_drift_alldrift=[];
 %% Read Data
 name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
 for j=1:length(name_drifter)%% loop on all drifters 
-   %disp(name_drifter(j).name) % to see the steps 
+ %  disp(name_drifter(j).name) % to see the steps 
 %drifter=read_DRIFTER(name_drifter(j).name,Const);
-drifter=read_DRIFTER('984.xlsx',Const);
+drifter=read_DRIFTER('984.xlsx',Const); % for a precise drifter comment the loop and uncomment this line
 radar=read_RADAR('Radials_RUV_May19.nc',Const);
 
 
@@ -69,7 +69,7 @@ drifter.time=drifter.time(shared.i);
 [radar,drifter,shared]=closer_point(radar,drifter,shared,Const); % searching for closer point
 
 %% Filter spikes
-[drifter,radar]=filter_spike(drifter,radar);
+[drifter,radar]=filter_spike2(drifter,radar);
 
 %% Statistics
 
@@ -81,16 +81,16 @@ if length(drifter.U)>1 %no error in case of no space and time shared
 
     figure()
     hold on
-    plot(drifter.time,drifter.Vr,'bo');
-    plot(drifter.time,radar.closer_Vr,'rx')
-%    title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
+    plot(drifter.time_drifter2,drifter.Vr_filter2,'bo');
+    plot(drifter.time_radar2,radar.closer_Vr_filter2,'rx')
+ %   title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
     ylabel('vitesse en m/s')
     datetick('x','mmm-dd-hh','keepticks')
     legend('drifter','radar')
     hold off
-    pause(1)
+    pause 
 end
-end 
+%end 
 
 
 
