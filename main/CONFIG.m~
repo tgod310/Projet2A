@@ -10,9 +10,7 @@ Const.d2h = 24; % day in hour
 Const.PEY_lon0;
 Const.PEY_lat0;
 
+
 %% POB position
-Const.POB_lon0;
-Const.POB_lat0;
 
 %% CODAR position
-Const.COD_lon
