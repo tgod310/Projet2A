@@ -19,8 +19,15 @@ shared.time_origin='2010-01-01 00:00:00';
 
 %% Recuperation des donnees
 %%%Comparaison radar model%%%
-radar=read_RADAR('20190300001_20191002301_PEY_L1.nc',Const);
-model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
+%radar=read_RADAR('20190300001_20191002301_PEY_L1.nc',Const);
+%radar=read_RADAR('20190300001_20191002301_POB_L1.nc',Const);
+radar=read_RADAR('Radials_RUV_May19.nc',Const);
+
+%model=read_MODEL('1_NIDOR_20190202_20190215_grid_U.nc','1_NIDOR_20190202_20190215_grid_V.nc');
+%model=read_MODEL('GLAZUR64_20190202_20190215_grid_U.nc','GLAZUR64_20190202_20190215_grid_V.nc');
+%model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc');
+model=read_MODEL('GLAZUR64_20190511_20190524_grid_U.nc','GLAZUR64_20190511_20190524_grid_V.nc');
+
 
 %%%Comparaison drifter model%%%
 %drifter=read_DRIFTER('033.xlsx');
@@ -101,7 +108,7 @@ for i=2:length(shared.time)-1
     subplot(2,2,1)
     hold on
     contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,i));
-    contour(shared.lon,shared.lat,model.Vr(:,:,i),'ShowText','on','LineColor','k','LineWidth',)
+    contour(shared.lon,shared.lat,model.Vr(:,:,i),'ShowText','on','LineColor','k','LineWidth',2)
     s=colorbar;
     c=caxis;
     s.Label.String='Vitesse radiale (m\cdot s^{-1})';
@@ -111,7 +118,7 @@ for i=2:length(shared.time)-1
     subplot(2,2,2)
     hold on
     contourf(shared.lon,shared.lat,model.Vr(:,:,i))
-    contour(shared.lon,shared.lat,radar.interp_Vr(:,:,i),'ShowText','on','LineColor','k')
+    contour(shared.lon,shared.lat,radar.interp_Vr(:,:,i),'ShowText','on','LineColor','k','LineWidth',2)
     s=colorbar;
     caxis(c)
     s.Label.String='Vitesse radiale (m\cdot s^{-1})';

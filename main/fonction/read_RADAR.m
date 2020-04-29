@@ -20,17 +20,19 @@ data_RADAR.lat=ncread(name_file,'lat');
 try
     data_RADAR.angle=ncread(name_file,'ang');
 catch
-    dist_lon=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat,data_RADAR.lon0,Const)*Const.km2m;
-    dist_lat=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat0,data_RADAR.lon,Const)*Const.km2m;
-    data_RADAR.angle=atan2d(dist_lat,dist_lon);
-    q1=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat<data_RADAR.lat0;
-    q2=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat>=data_RADAR.lat0;
-    q3=data_RADAR.lon>data_RADAR.lon0 & data_RADAR.lat>=data_RADAR.lat0;
-    q4=data_RADAR.lon>data_RADAR.lon0 & data_RADAR.lat<data_RADAR.lat0;
-    data_RADAR.angle(q1)=90-data_RADAR.angle(q1);
-    data_RADAR.angle(q2)=270+data_RADAR.angle(q2);
-    data_RADAR.angle(q3)=270-data_RADAR.angle(q3);
-    data_RADAR.angle(q4)=90+data_RADAR.angle(q4);
+%     dist_lon=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat,data_RADAR.lon0,Const)*Const.km2m;
+%     dist_lat=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat0,data_RADAR.lon,Const)*Const.km2m;
+%     data_RADAR.angle=atan2d(dist_lat,dist_lon);
+%     q1=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat<data_RADAR.lat0;
+%     q2=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat>=data_RADAR.lat0;
+%     q3=data_RADAR.lon>data_RADAR.lon0 & data_RADAR.lat>=data_RADAR.lat0;
+%     q4=data_RADAR.lon>data_RADAR.lon0 & data_RADAR.lat<data_RADAR.lat0;
+%     data_RADAR.angle(q1)=90-data_RADAR.angle(q1);
+%     data_RADAR.angle(q2)=270+data_RADAR.angle(q2);
+%     data_RADAR.angle(q3)=270-data_RADAR.angle(q3);
+%     data_RADAR.angle(q4)=90+data_RADAR.angle(q4);
+    [data_RADAR.x,data_RADAR.y]=xylonlat(data_RADAR.lon,data_RADAR.lat,data_RADAR.lon0,data_RADAR.lat0,1);
+    [d,data_RADAR.angle,az_rx]=dist_angle(0,0,0,0,1,data_RADAR.x,data_RADAR.y);
 end
 
 data_RADAR.time=ncread(name_file,'time')-Const.UTC2;
