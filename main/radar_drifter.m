@@ -83,7 +83,10 @@ if length(drifter.U)>1 %no error in case of no space and time shared
     title(strcat('Frequence inertielle = ',num2str(drifter.f_inertial)))
     xlabel('f (Hz)')
     ylabel('|P1(f)|')
-
+%     if drifter.f_inertial > 34 && drifter.f_inertial <35
+%        savefig(strcat('Frequence inertielle = ',num2str(name_drifter(j).name(1:3))))
+%     end
+%     
     
     %%% Display speed drifter and radar
     figure()
@@ -95,7 +98,12 @@ if length(drifter.U)>1 %no error in case of no space and time shared
     datetick('x','mmm-dd-hh','keepticks')
     legend('drifter','radar')
     hold off
-    pause 
+    pause(1)
+%     if drifter.f_inertial > 34 && drifter.f_inertial <35
+%        savefig(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
+%     end
+    
+    
 end
 end 
  
