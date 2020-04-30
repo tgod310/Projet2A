@@ -4,14 +4,10 @@
 % Cleaning data
 clear;
 close all;
+
 clc;
 
-% Constant
-Const.UTC2=1/12;
-Const.R = 6371; % earth radius km 
-Const.d2s = 86400; %day in sec
-Const.km2m = 1000; %km in m 
-Const.d2h = 24; % day in hour
+CONFIG
 
 % Add data path  Yann 
 addpath('..\..\round1','..\..\round2','..\..\WERA')
@@ -36,7 +32,7 @@ name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
 for j=1:length(name_drifter)%% loop on all drifters 
    disp(name_drifter(j).name) % to see the steps 
 drifter=read_DRIFTER(name_drifter(j).name,Const);
-%drifter=read_DRIFTER('984.xlsx',Const); % for a precise drifter comment the loop and uncomment this line
+%drifter= read_DRIFTER('653.xlsx',Const); % for a precise drifter comment the loop and uncomment this line
 radar=read_RADAR('Radials_RUV_May19.nc',Const);
 
 
@@ -79,6 +75,17 @@ drifter.time=drifter.time(shared.i);
 %% Display
 if length(drifter.U)>1 %no error in case of no space and time shared  
 
+    [drifter.f,drifter.P1,drifter.f_inertial]=spectrum_drifter(drifter,radar,Const);
+    
+    %%%Display frequency spectrum 
+    figure()
+    plot(drifter.f,drifter.P1) 
+    title(strcat('Frequence inertielle = ',num2str(drifter.f_inertial)))
+    xlabel('f (Hz)')
+    ylabel('|P1(f)|')
+
+    
+    %%% Display speed drifter and radar
     figure()
     hold on
     plot(drifter.time_drifter2,drifter.Vr_filter2,'bo');
