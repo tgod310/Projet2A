@@ -28,7 +28,7 @@ if data.name =='r'
     T=(drifter.time_drifter2(1)-drifter.time_drifter2(end))/length(drifter.time_drifter2); % in day  
     Fs=1/T;
     f = Fs*(0:(L/2))/L;
-    i_Max= P1 ==max(P1(4:end));
+    i_Max= P1 ==max(P1(3:end));
     F_max=f(i_Max);
     F_maxheures=F_max*Const.d2h;
 end
