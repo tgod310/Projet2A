@@ -50,7 +50,7 @@ drifter.lat=drifter.lat(shared.i_shared);
 drifter.time=drifter.time(shared.i_shared);
        
 %%%filter spikes%%%
-%drifter=filter_spike(drifter,model);
+drifter=filter_spike2(drifter,model);
 
 
         
@@ -64,7 +64,7 @@ shared.mean_distance=mean(shared.delta_D);
 %% Frequency spectrum
 if length(drifter.U)>1
     
-    [drifter.f,drifter.P1,drifter.f_inertial]=spectrum_drifter(drifter,Const);
+    [drifter.f,drifter.P1,drifter.f_inertial]=spectrum_drifter(drifter,model,Const);
     
     %%%Display frequency spectrum 
     figure(1)
