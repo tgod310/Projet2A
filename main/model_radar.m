@@ -1,5 +1,7 @@
 %% -- MODEL-RADAR -- %%
 
+% Befor running choose the type of radar and the files you want to compare
+
 %% Initialisation
 % Data cleaning
 clear;close all;clc;
@@ -58,13 +60,6 @@ model=projection(model,radar); % Space projection of model on radar radial
 shared.difference=(abs(model.Vr)-abs(radar.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
 shared.difference2=abs(abs(model.Vr)-abs(radar.interp_Vr));
 shared.difference2(shared.difference2>0.2)=NaN; % Suppression des valeurs trop importantes (> 0.2m/s)
-
-s=size(shared.lon);
-diag=NaN(s(1),length(shared.time));
-for i=1:length(shared.time)
-    t=shared.difference2(:,:,i);
-    diag(:,i)=mean(t(shared.lon>=Const.lon0-0.01 & shared.lon<=Const.lon0+0.01),2);
-end
 
 %% Display
 jour=10; % choix du jour a afficher
