@@ -1,18 +1,44 @@
 %% Fichier de configuration des constantes
 
-Const.UTC2=1/12; % real time to UTC
-Const.R = 6371; % earth radius km 
-Const.d2s = 86400; % day in sec
-Const.km2m = 1000; % km in m 
-Const.d2h = 24; % day in hour
+Const.UTC2        = 1/12;      % real time to UTC
+Const.R           = 6371;      % earth radius km 
+Const.d2s         = 86400;     % day in sec
+Const.km2m        = 1000;      % km in m 
+Const.d2h         = 24;        % day in hour
 
-%% PEY position
-Const.PEY_lon0;
-Const.PEY_lat0;
+if type_RADAR=='PEY'
+% PEY position
+Const.Radar_type='PEY';
+Const.lon_rx      = 5.861066;  % RX longitude [decimal deg]
+Const.lat_rx      = 43.063078; % RX latitude  [decimal deg]
+Const.lon_tx      = 5.861066;  % TX longitude [decimal deg]
+Const.lat_tx      = 43.063078; % TX latitude  [decimal deg]
+Const.lon0        = 5.861066;  % Origin of the radial grid, longitude [decimal deg]
+Const.lat0        = 43.063078; % Origin of the radial grid, latitude  [decimal deg]
+Const.mono        =1;          % Monostatique Radar
 
-%% POB position
-Const.POB_lon0;
-Const.POB_lat0;
+elseif type_RADAR=='POB'
+% POB position
+Const.Radar_type='POB';
+Const.lon_rx      = 6.357616;  % RX longitude [decimal deg]
+Const.lat_rx      = 43.091933; % RX latitude  [decimal deg]
+Const.lon_tx      = 6.204189;  % TX longitude [decimal deg]
+Const.lat_tx      = 42.983084; % TX latitude  [decimal deg]
+Const.lon0        = 5.861066;  % Origin of the radial grid, longitude [decimal deg]
+Const.lat0        = 43.063078; % Origin of the radial grid, latitude  [decimal deg]
+Const.mono        = 2;         % Bistatique Radar
 
-%% CODAR position
-Const.COD_lon
+elseif type_RADAR=='COD'
+% CODAR position
+Const.Radar_type='COD';
+Const.lat0        = 43.6750;   % Origin of the radial grid, latitude  [decimal deg]
+Const.lon0        = 7.3271;    % Origin of the radial grid, longitude [decimal deg]
+Const.lat_tx      = 43.6750;   % TX latitude  [decimal deg]radar.alpha  
+Const.lon_tx      = 7.3271333; % TX longitude [decimal deg]
+Const.lat_rx      = 43.6750;   % RX latitude  [decimal deg]
+Const.lon_rx      = 7.3271333; % RX longitude [decimal deg]
+Const.mono=1;
+
+else
+    error('Please enter a valid radar type')
+end

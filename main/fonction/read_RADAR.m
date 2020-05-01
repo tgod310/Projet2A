@@ -6,12 +6,6 @@ data_RADAR.info=ncinfo(name_file);
 data_RADAR.xr=ncread(name_file,'xr');
 data_RADAR.yr=ncread(name_file,'yr');
 
-data_RADAR.lat0=43.6750; % Origin of the radial grid, latitude  [decimal deg]
-data_RADAR.lon0=7.3271;  % Origin of the radial grid, longitude [decimal deg]
-
-% data_RADAR.lat0=43.0631; % Origin of the radial grid, latitude  [decimal deg]
-% data_RADAR.lon0=5.8611;  % Origin of the radial grid, longitude [decimal deg]
-
 data_RADAR.lon=ncread(name_file,'lon');
 data_RADAR.lat=ncread(name_file,'lat');
 
@@ -20,22 +14,19 @@ data_RADAR.lat=ncread(name_file,'lat');
 try
     data_RADAR.angle=ncread(name_file,'ang');
 catch
-%     dist_lon=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat,data_RADAR.lon0,Const)*Const.km2m;
-%     dist_lat=distancelonlat(data_RADAR.lat0,data_RADAR.lon0,data_RADAR.lat0,data_RADAR.lon,Const)*Const.km2m;
-%     data_RADAR.angle=atan2d(dist_lat,dist_lon);
-%     q1=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat<data_RADAR.lat0;
-%     q2=data_RADAR.lon<data_RADAR.lon0 & data_RADAR.lat>=data_RADAR.lat0;
-%     q3=data_RADAR.lon>data_RADAR.lon0 & data_RADAR.lat>=data_RADAR.lat0;
-%     q4=data_RADAR.lon>data_RADAR.lon0 & data_RADAR.lat<data_RADAR.lat0;
-%     data_RADAR.angle(q1)=90-data_RADAR.angle(q1);
-%     data_RADAR.angle(q2)=270+data_RADAR.angle(q2);
-%     data_RADAR.angle(q3)=270-data_RADAR.angle(q3);
-%     data_RADAR.angle(q4)=90+data_RADAR.angle(q4);
-    [data_RADAR.x,data_RADAR.y]=xylonlat(data_RADAR.lon,data_RADAR.lat,data_RADAR.lon0,data_RADAR.lat0,1);
-    [d,data_RADAR.angle,az_rx]=dist_angle(0,0,0,0,1,data_RADAR.x,data_RADAR.y);
+    [data_RADAR.x,data_RADAR.y]=xylonlat(data_RADAR.lon,data_RADAR.lat,Const.lon0,Const.lat0,1);
+    % We choose the transmission point the origin of the coordinate system
+    Tx_origin=0;
+    Ty_origin=0;
+    [Rx_origin,Ry_origin]=xylonlat(Const.lon_tx,Const.lat_tx,Const.lon0,Const.lat0,1);
+    data_RADAR.angle=dist_angle(Tx_origin,Ty_origin,Rx_origin,Ry_origin,Const.mono,data_RADAR.x,data_RADAR.y);
 end
 
-data_RADAR.time=ncread(name_file,'time')-Const.UTC2;
+data_RADAR.time=ncread(name_file,'time');
+if Const.Radar_type=='PEY' | Const.Radar_type=='POB';
+    data_RADAR.time=data_RADAR.time-Const.UTC2;
+end
+
 data_RADAR.Vr=ncread(name_file,'v');
 data_RADAR.time_origin=datenum(ncreadatt(name_file,'time','time_origin'));
 

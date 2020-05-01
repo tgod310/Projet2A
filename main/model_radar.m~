@@ -60,10 +60,10 @@ shared.difference2=abs(abs(model.Vr)-abs(radar.interp_Vr));
 shared.difference2(shared.difference2>0.2)=NaN; % Suppression des valeurs trop importantes (> 0.2m/s)
 
 s=size(shared.lon);
-diag=NaN(s(1),length(shared.time));
+diag=NaN(s(2),length(shared.time));
 for i=1:length(shared.time)
     t=shared.difference2(:,:,i);
-    diag(:,i)=mean(t(shared.lon>=Const.lon0-0.01 & shared.lon<=Const.lon0+0.01),2);
+    diag(:,i)=mean(t(shared.lon>=Const.lon0-0.01 & shared.lon
 end
 
 %% Display

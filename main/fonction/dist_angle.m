@@ -3,7 +3,7 @@
 %revu PB 02/2002
 %  revu PFO 5/04/2012 pour le mono-bistatique
 
-function [d, az, az_rx] = dist_angle(xA,yA,xB,yB,mono_bi,x,y)
+function az = dist_angle(xA,yA,xB,yB,mono_bi,x,y)
 
 % INPUTS:
 % - xA/xB, yA/yB: RADAR coordinates (A: TX, B: RX) [km]

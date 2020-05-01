@@ -14,11 +14,11 @@ Const.km2m = 1000; %km in m
 Const.d2h = 24; % day in hour
 
 % Add data path  Yann 
-addpath('..\..\round1','..\..\round2','..\..\WERA')
-drifter.path_drifter = '..\..\round1';
+%addpath('..\..\round1','..\..\round2','..\..\WERA')
+%drifter.path_drifter = '..\..\round1';
 % Add data path Theo
-%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
-%drifter.path_drifter = '../../drifter/round1';
+addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+drifter.path_drifter = '../../drifter/round1';
 % Add path fonctions
 addpath('fonction')
 

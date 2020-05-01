@@ -11,11 +11,11 @@ Const.km2m = 1000; %km in m
 Const.d2h = 24; % day in hour 
 
 % Add data path  Yann 
-addpath('..\..\round1','..\..\round2','..\..\NEMO')
-drifter.path_drifter = '..\..\round1';
+%addpath('..\..\round1','..\..\round2','..\..\NEMO')
+%drifter.path_drifter = '..\..\round1';
 % Add data path Théo
-%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
-%drifter.path_drifter = '../../drifter/round1';
+addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+drifter.path_drifter = '../../drifter/round1';
 % Add data path fonctions
 addpath('fonction')
 
@@ -50,7 +50,7 @@ drifter.lat=drifter.lat(shared.i_shared);
 drifter.time=drifter.time(shared.i_shared);
        
 %%%filter spikes%%%
-drifter=filter_spike(drifter,model);
+%drifter=filter_spike(drifter,model);
 
 
         
