@@ -173,6 +173,7 @@ title('Vitesse radar avec contour du modèle')
 hold off
 
 figure()
-contourf(shared.T,shared.lat3,shared.graph_diff3)
+contourf(shared.T+shared.time_origin_julien,shared.lat3,shared.graph_diff3)
 title(['Différence entre radar et modèle en fonction du temps sur la longitude ' num2str(Const.lon0)])
+s.Label.String='Vitesse (m\cdot s^{-1})';
 colorbar
