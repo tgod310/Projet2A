@@ -19,7 +19,7 @@ function [data,drifter,shared] = closer_point(data,drifter,shared,Const)
         % Calculation distance with shared model 
         dist=distancelonlat(drifter.lat(i),drifter.lon(i),shared.lat,shared.lon,Const);
 
-        % I longitude of closer point J latitude
+        % I longitude, J latitude of closer point 
         shared.delta_D(i)=min(min(dist));
 %         [drifter.closer_lon(i),drifter.closer_lat(i)]=find(dist==min(min(dist)));
 %         I=drifter.closer_lon(i);

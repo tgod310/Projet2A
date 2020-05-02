@@ -28,7 +28,6 @@ file_MODEL_V='GLAZUR64_20190511_20190524_grid_V.nc'; % Name of the model file
 
 % Configuration of constantes
 CONFIG % Use the configuration file
-Affichage_jour=10; % choix du jour a afficher
 
 % Add path of studied data
 addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
@@ -77,10 +76,11 @@ end
 [shared.T,shared.lat3]=meshgrid(shared.time,shared.lat(D==D_min));
 
 %% Display
+jour=10; % choix du jour a afficher
 
 % Moyenne radar sur le jour
 figure(1)
-contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,Affichage_jour));
+contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,jour));
 colorbar
 c=caxis;
 title('Moyenne radar par jour')
@@ -88,8 +88,8 @@ title('Moyenne radar par jour')
 % Norme du Modele
 figure(2)
 hold on
-contourf(model.lon,model.lat,model.norm(:,:,Affichage_jour));
-quiver(model.lon,model.lat,model.U(:,:,Affichage_jour),model.V(:,:,Affichage_jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+contourf(model.lon,model.lat,model.norm(:,:,jour));
+quiver(model.lon,model.lat,model.U(:,:,jour),model.V(:,:,jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
 hold off
 colorbar
 caxis(c);
@@ -98,8 +98,8 @@ title('Norme du modele')
 % Interpolation du modele
 figure(3)
 hold on
-contourf(shared.lon,shared.lat,sqrt(model.interp_U(:,:,Affichage_jour).^2+model.interp_V(:,:,Affichage_jour).^2))
-quiver(shared.lon,shared.lat,model.interp_U(:,:,Affichage_jour),model.interp_V(:,:,Affichage_jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
+contourf(shared.lon,shared.lat,sqrt(model.interp_U(:,:,jour).^2+model.interp_V(:,:,jour).^2))
+quiver(shared.lon,shared.lat,model.interp_U(:,:,jour),model.interp_V(:,:,jour),'LineWidth',0.75,'AutoScaleFactor',1.5,'Color','r')
 hold off
 colorbar
 caxis(c)
@@ -107,27 +107,27 @@ title('Interpolation du modele')
 
 % Projection du modele
 figure(4)
-contourf(shared.lon,shared.lat,model.Vr(:,:,Affichage_jour))
+contourf(shared.lon,shared.lat,model.Vr(:,:,jour))
 colorbar
 caxis(c)
 title('Projection du modele')
 
 % Comparaison
 figure(5)
-contourf(shared.lon,shared.lat,shared.difference(:,:,Affichage_jour))
+contourf(shared.lon,shared.lat,shared.difference(:,:,jour))
 colorbar
 title('Comparaison entre radar et model')
 
 figure(6)
-contourf(shared.lon,shared.lat,shared.difference2(:,:,Affichage_jour))
+contourf(shared.lon,shared.lat,shared.difference2(:,:,jour))
 s=colorbar;
 s.Label.String='Vitesse (m\cdot s^{-1})';
-title(['Difference radar-modele ' datestr(shared.time(Affichage_jour)+shared.time_origin_julien)])
+title(['Difference radar-modele ' datestr(shared.time(jour)+shared.time_origin_julien)])
 
-f=figure(7);
-f.WindowState='maximized';
 for i=2:length(shared.time)-1
-    clf    
+    f=figure(7);
+    f.WindowState='maximized';
+    
     subplot(2,2,1)
     hold on
     contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,i));
@@ -166,13 +166,11 @@ end
 
 figure()
 hold on
-contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,Affichage_jour))
+contourf(shared.lon,shared.lat,radar.interp_Vr(:,:,jour))
 colorbar
-contour(shared.lon,shared.lat,model.Vr(:,:,Affichage_jour),'ShowText','on','LineColor','k')
-title('Vitesse radar avec contour du modèle')
+contour(shared.lon,shared.lat,model.Vr(:,:,jour),'ShowText','on','LineColor','k')
 hold off
 
 figure()
 contourf(shared.T,shared.lat3,shared.graph_diff3)
-title(['Différence entre radar et modèle en fonction du temps sur la longitude ' num2str(Const.lon0)])
 colorbar
