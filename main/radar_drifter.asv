@@ -6,25 +6,15 @@ clear;
 close all;
 
 clc;
-% Data choosen by user
-type_RADAR='COD'; % Choose the type of Radar between PEY, POB and COD
 
-% PEY
-%file_RADAR='20190300001_20191002301_PEY_L1.nc'; % Name of the Radar file
-
-% POB
-%file_RADAR='20190300001_20191002301_POB_L1.nc'; % Name of the Radar file
-
-% COD
-file_RADAR='Radials_RUV_May19.nc'; % Name of the Radar file
 CONFIG
 
 % Add data path  Yann 
-addpath('..\..\round1','..\..\round2','..\..\WERA')
-drifter.path_drifter = '..\..\round1';
+%addpath('..\..\round1','..\..\round2','..\..\WERA')
+%drifter.path_drifter = '..\..\round1';
 % Add data path Theo
-%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
-%drifter.path_drifter = '../../drifter/round1';
+addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+drifter.path_drifter = '../../drifter/round1';
 % Add path fonctions
 addpath('fonction')
 
@@ -45,14 +35,14 @@ for j=1:length(name_drifter)%% loop on all drifters
 %% Get Data
 drifter=read_DRIFTER(name_drifter(j).name,Const);
 %drifter= read_DRIFTER('653.xlsx',Const); % for a precise drifter comment the loop and uncomment this line
-radar=read_RADAR(file_RADAR,Const);
+radar=read_RADAR('Radials_RUV_May19.nc',Const);
 
 
 %% Shared time
 
 shared.time_origin_julien=datenum(shared.time_origin); % time origin in julian calendar
-drifter.time=drifter.time+drifter.time_origin; 
-radar.time=radar.time+radar.time_origin; 
+drifter.time=drifter.time+drifter.time_origin-shared.time_origin_julien; 
+radar.time=radar.time+radar.time_origin-shared.time_origin_julien; 
 
 [radar,drifter,shared]=shared_time(radar,drifter,shared); 
 

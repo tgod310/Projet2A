@@ -31,9 +31,9 @@ CONFIG % Use the configuration file
 Affichage_jour=10; % choix du jour a afficher
 
 % Add path of studied data
-addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
+%addpath('../../','../../NEMO','../../WERA','../../drifter/round1','../../drifter/round2');
 % Ajout chemin Yann 
-%addpath('..\..\NEMO','..\..\WERA');
+addpath('..\..\NEMO','..\..\WERA');
 % Add path of fonction folder
 addpath('fonction')
 
@@ -51,7 +51,7 @@ model.time=model.time+model.time_origin-shared.time_origin_julien; % Model time 
 
 [model,radar,shared]=shared_time(model,radar,shared); % Get shared time
 
-%% Time standardisation
+%% Space standardisation
 [radar,model,shared]=shared_space(radar,model,shared); % Get shared space
 
 [model,radar]=interpolation(model,radar,shared); % Space interpolation of model on radar grid and mean time of radar on model grid
