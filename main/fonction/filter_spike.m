@@ -1,83 +1,158 @@
 function [drifter,data] = filter_spike(drifter,data)
-%filter spikes over 20 cm/s
-  ignore = isnan(drifter.Vr) == 1;
-         drifter.Vrnotnan = drifter.Vr;
-         drifter.Vrnotnan(ignore ~= 0)=[];
-         
-       Mean = mean(drifter.Vrnotnan);
-       for m=1:length(drifter.Vr)
-            if drifter.Vr(m)> Mean + 3 || drifter.Vr(m)< Mean -3
-                drifter.Vr(m)=NaN ;
+%filter_spike
+
+if data.name=='r'
+%Remove NaN 
+to_ignore= isnan(drifter.Vr)==1;
+drifter.Vr_filter=drifter.Vr;
+drifter.Vr_filter(to_ignore)=[];
+drifter.time_drifter=drifter.time;
+drifter.time_drifter(to_ignore)=[];
+
+
+
+to_ignore1=isnan(data.closer_Vr)==1 ;
+data.closer_Vr_filter=data.closer_Vr;
+data.closer_Vr_filter(to_ignore1)=[];
+drifter.time_radar=drifter.time;
+drifter.time_radar(to_ignore1)=[];
+
+%Remove > Mean 
+Mean_drifter = mean(drifter.Vr_filter);
+to_ignore2= drifter.Vr_filter > Mean_drifter + 3 | drifter.Vr_filter < Mean_drifter - 3;
+drifter.Vr_filter(to_ignore2)=[];
+drifter.time_drifter(to_ignore2)=[];
+
+Mean_data = mean(data.closer_Vr_filter);
+to_ignore3 = data.closer_Vr_filter > Mean_data + 3 | data.closer_Vr_filter < Mean_data - 3 ;
+data.closer_Vr_filter(to_ignore3)=[];
+drifter.time_radar(to_ignore3)=[];
+
+%Remove spike >0.2 m/s
+%For drifter
+drifter.T=zeros(1,length(drifter.Vr_filter));
+for i=1:length(drifter.Vr_filter)-1
+    if i == 1 
+        if abs(drifter.Vr_filter(i)-drifter.Vr_filter(i+1))>0.2
+            A = [abs(drifter.Vr_filter(i)-Mean_drifter),abs(drifter.Vr_filter(i+1)-Mean_drifter)];
+            Min = find(A == min(A));
+            if Min == 1 
+                drifter.T(i+1)=1;
+            else 
+                drifter.T(i)=1;
             end
-       end
-for i=1:length(drifter.U)-1
-    
-        if  abs(drifter.U(i)-drifter.U(i+1))> 0.2
-         drifter.U(i+1)=NaN;
         end
-         if abs(drifter.V(i)-drifter.V(i+1))> 0.2
-         drifter.V(i+1)=NaN;
-         end
-       
-       
-         if isnan(drifter.Vr(i))==0  % if it is a number 
-              if abs(drifter.Vr(i)-drifter.Vr(i+1))> 0.2 
-                   b=i;
-                   while abs(drifter.Vr(b)-drifter.Vr(i+1))> 0.2 && i<length(drifter.Vr)-1
-                   if abs(drifter.Vr(i+1)-drifter.Vr(i+2))< abs(drifter.Vr(i)-drifter.Vr(i+1))
-                       drifter.Vr(i)=NaN;
-                       b=b+1;
-                   else 
-                       drifter.Vr(i+1)=NaN;
-                   i=i+1;
-                   end
+    else
+        if drifter.T(i)==0
+            if abs(drifter.Vr_filter(i)-drifter.Vr_filter(i+1))>0.2
+            % i_Max= find(max(abs(drifter.Vr_filter(i)-drifter.Vr_filter(i-1)),abs(drifter.Vr_filter(i)-drifter.Vr_filter(i+1))));
+                drifter.T(i+1)= 1;
+            end
+        end
+        if drifter.T(i)==1
+            a=i;
+            while drifter.T(i-1)==1
+                i=i-1;
+            end
+            if abs(drifter.Vr_filter(a+1)-drifter.Vr_filter(i-1))>0.2
+               drifter.T(a+1) = 1;
+            end
+        end
+    end
+end
+drifter.Vr_filter2=drifter.Vr_filter;
+drifter.Vr_filter2(drifter.T ~= 0)=[];
+drifter.time_drifter2=drifter.time_drifter;
+drifter.time_drifter2(drifter.T ~= 0)=[];
 
-              end
-             
-         end
-         
-         if isnan(drifter.Vr(i))==1 % if it is a NaN 
-            if i>1
-                if abs(drifter.Vr(i-1)-drifter.Vr(i+1))> 0.2 
-                    b=i-1;
-                    while abs(drifter.Vr(b)-drifter.Vr(i+1))> 0.2 && i<length(drifter.Vr)-1
-                        drifter.Vr(i+1)=NaN;
-                        i=i+1;
-                    end
-               
-                end
-             end
-         end
-
-end 
-
-if data.name=='r' 
+%for radar
+data.T=zeros(1,length(data.closer_Vr_filter));
+for i=1:length(data.closer_Vr_filter)-1
+    if abs(data.closer_Vr_filter(i)-data.closer_Vr_filter(i+1))>0.35 && data.T(i) == 0
+      if i<length(data.closer_Vr_filter)-2
+        while data.closer_Vr_filter(i+1)==data.closer_Vr_filter(i+2) && i<length(data.closer_Vr_filter)-2
+                data.T(i+1)=1;
+                i=i+1;
+        end
+        data.T(i+1)= 1;
+      else
+        data.T(i+1)= 1;
+      end
     
-   for k=1:length(data.closer_Vr)-1
-       if  abs(data.closer_Vr(k)-data.closer_Vr(k+1))> 0.35
-           
-           while data.closer_Vr(k+1)==data.closer_Vr(k+2)
-                data.closer_Vr(k+1)=NaN;
-                k=k+1;
-           end
-           data.closer_Vr(k+1)=NaN;
-       end
-       if isnan(data.closer_Vr(k))==0 && isnan(data.closer_Vr(k+1))==1   % if k is not NaN and k+1 is NaN
-          a=k;
-           while isnan(data.closer_Vr(k+1))==1 && k<length(data.closer_Vr)-1
-              k=k+1;
-          end
-          if abs(data.closer_Vr(a)-data.closer_Vr(k+1))>0.35
-           while data.closer_Vr(k+1)==data.closer_Vr(k+2)
-                data.closer_Vr(k+1)=NaN;
-                k=k+1;
-           end
-           data.closer_Vr(k+1)=NaN;
-          end    
-       end
-   end
+    end
 end
+data.closer_Vr_filter2=data.closer_Vr_filter;
+data.closer_Vr_filter2(data.T ~= 0)=[];
+drifter.time_radar2=drifter.time_radar;
+drifter.time_radar2(data.T ~= 0)=[];
 
 end
+if length(drifter.U)>1
+if data.name=='m'
+%Remove NaN 
+to_ignore= isnan(drifter.U)==1;
+drifter.U_filter=drifter.U;
+drifter.U_filter(to_ignore)=[];
+drifter.time_drift_m=drifter.time;
+drifter.time_drift_m(to_ignore)=[];
 
+
+to_ignore1=isnan(data.closer_U)==1 ;
+data.closer_U_filter=data.closer_U;
+data.closer_U_filter(to_ignore1)=[];
+drifter.time_model=drifter.time;
+drifter.time_model(to_ignore1)=[];
+
+%Remove > Mean 
+Mean_drifter = mean(drifter.U_filter);
+to_ignore2= drifter.U_filter > Mean_drifter + 3 | drifter.U_filter < Mean_drifter - 3;
+drifter.U_filter(to_ignore2)=[];
+drifter.time_drift_m(to_ignore2)=[];
+
+Mean_data = mean(data.closer_U_filter);
+to_ignore3 = data.closer_U_filter > Mean_data + 3 | data.closer_U_filter < Mean_data - 3 ;
+data.closer_U_filter(to_ignore3)=[];
+drifter.time_model(to_ignore3)=[];
+
+% %Remove spike >0.2 m/s
+% %For drifter
+drifter.T=zeros(1,length(drifter.U_filter));
+for i=1:length(drifter.U_filter)-1
+    if i == 1 
+        if abs(drifter.U_filter(i)-drifter.U_filter(i+1))>0.2
+            A = [abs(drifter.U_filter(i)-Mean_drifter),abs(drifter.U_filter(i+1)-Mean_drifter)];
+            Min = find(A == min(A));
+            if Min == 1 
+                drifter.T(i+1)=1;
+            else 
+                drifter.T(i)=1;
+            end
+        end
+    else
+        if drifter.T(i)==0
+            if abs(drifter.U_filter(i)-drifter.U_filter(i+1))>0.2
+            % i_Max= find(max(abs(drifter.Vr_filter(i)-drifter.Vr_filter(i-1)),abs(drifter.Vr_filter(i)-drifter.Vr_filter(i+1))));
+                drifter.T(i+1)= 1;
+            end
+        end
+        if drifter.T(i)==1
+            a=i;
+            while drifter.T(i-1)==1
+                i=i-1;
+            end
+            if abs(drifter.U_filter(a+1)-drifter.U_filter(i-1))>0.2
+               drifter.T(a+1) = 1;
+            end
+        end
+    end
+end
+drifter.U_filter2=drifter.U_filter;
+drifter.U_filter2(drifter.T ~= 0)=[];
+drifter.time_drifter2=drifter.time_drift_m;
+drifter.time_drifter2(drifter.T ~= 0)=[];
+
+    
+end
+end
+end
 

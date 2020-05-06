@@ -77,7 +77,7 @@ drifter.time=drifter.time(shared.i);
 [radar,drifter,shared]=closer_point(radar,drifter,shared,Const); % searching for closer point
 
 %% Filter spikes
-[drifter,radar]=filter_spike2(drifter,radar);
+[drifter,radar]=filter_spike(drifter,radar);
 
 %% Statistics
 
@@ -110,11 +110,17 @@ if length(drifter.U)>1 %no error in case of no space and time shared
     datetick('x','mmm-dd-hh','keepticks')
     legend('drifter','radar')
     hold off
-    pause(1)
+    
 %     if drifter.f_inertial > 34 && drifter.f_inertial <35
 %        savefig(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
 %     end
-    
+     figure()
+    plot(drifter.time,shared.delta_Vr,'b');
+    title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
+    ylabel('erreur')
+    datetick('x','mmm-dd-hh','keepticks')
+    xlabel(strcat('moyenne\_diff = ',num2str(stat.mean_delta_U),' rms = ',num2str(stat.indiv.rms),' corr = ',num2str(stat.indiv.corr)))
+    pause
     
 end
 end 

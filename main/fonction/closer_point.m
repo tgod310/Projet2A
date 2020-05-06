@@ -11,7 +11,9 @@ function [data,drifter,shared] = closer_point(data,drifter,shared,Const)
     drifter.closer_lat=shared.delta_D;
     shared.delta_T=shared.delta_D;
     data.closer_Vr=shared.delta_D;
+    data.closer_time = shared.delta_D;
     angle=shared.delta_D;
+    
 
     %% Loop taking each point of drifter and saving closer point
     for i=1:len
@@ -40,7 +42,7 @@ function [data,drifter,shared] = closer_point(data,drifter,shared,Const)
         end
 
         if data.name=='m' %if it is with model
-            data.closer_U(i)=data.U(I,J,1,c);%model speed 
+            data.closer_U(i)=data.U(I,J,1,c);%model speed       
             data.closer_V(i)=data.V(I,J,1,c);%lon,lat,depth,time
 
             shared.delta_U(i)=abs(data.closer_U(i)-drifter.U(i));
@@ -48,6 +50,7 @@ function [data,drifter,shared] = closer_point(data,drifter,shared,Const)
 
         elseif data.name=='r' % if it is with radar
             data.closer_Vr(i)=data.Vr(I,J,c);
+            data.closer_time(i) = data.time(c);
             angle(i)=data.angle(I,J);
         end
     end
