@@ -176,4 +176,11 @@ figure()
 contourf(shared.T+shared.time_origin_julien,shared.lat3,shared.graph_diff3)
 title(['Différence entre radar et modèle en fonction du temps sur la longitude ' num2str(Const.lon0)])
 s.Label.String='Vitesse (m\cdot s^{-1})';
+x_tl=cell(1,Const.size(3));
+dat=datestr(shared.T+shared.time_origin_julien);
+for i=1:Const.size(3)
+    x_tl{i}=dat(i,:);
+end
+xticklabels(x_tl)
+xtickangle(30)
 colorbar
