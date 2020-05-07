@@ -9,7 +9,7 @@ Const.R           = 6371;      % earth radius km
 Const.d2s         = 86400;     % day in sec
 Const.km2m        = 1000;      % km in m 
 Const.d2h         = 24;        % day in hour
-
+Const.w_terre     = (2*pi)/(23*3600+56*60+4.09); % earth angular velocity
 
 % Add data path  Yann 
 addpath('..\..\round1','..\..\round2','..\..\NEMO')
@@ -20,6 +20,9 @@ drifter.path_drifter = '..\..\round1';
 % Add data path fonctions
 addpath('fonction')
 
+stat.u_mod_alldrift=[];
+stat.u_drift_alldrift=[];
+
 % Time Origin
 shared.time_origin='2010-01-01 00:00:00';
 
@@ -28,7 +31,7 @@ name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
 for j=1:length(name_drifter)%% loop on all drifters 
    disp(name_drifter(j).name) % to see the steps 
 drifter=read_DRIFTER(name_drifter(j).name,Const);
-model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc',Const);
+model=read_MODEL('GLAZUR64_20190511_20190524_grid_U.nc','GLAZUR64_20190511_20190524_grid_V.nc',Const);
 
 %% Shared time
 shared.time_origin_julien=datenum(shared.time_origin); % time origin in julian calendar 
@@ -60,19 +63,20 @@ drifter.time=drifter.time(shared.i_shared);
 
 %% Statistics
 
-%[stat,shared]=statistic(drifter,radar,shared,stat);
+[stat,shared]=statistic(drifter,model,shared,stat);
 
 %% Display
 
 %% Frequency spectrum
 if length(drifter.U)>1
     
-    [drifter.f,drifter.P1,drifter.f_inertial]=spectrum_drifter(drifter,model,Const);
-    
+    [drifter.f,drifter.P1,drifter.t_inertial]=spectrum_drifter(drifter,model,Const);
+   T_inertie_th = (pi/(sind(stat.mean_lat)*Const.w_terre))/3600;
+   
     %%%Display frequency spectrum 
     figure()
     plot(drifter.f,drifter.P1)  
-    title(strcat('Frequence inertielle = ',num2str(drifter.f_inertial)))
+    title(strcat('T\_inertie\_exp = ',num2str(drifter.t_inertial),' T\_inertie\_th = ',num2str(T_inertie_th)))
     xlabel('f (Hz)')
     ylabel('|P1(f)|')
 

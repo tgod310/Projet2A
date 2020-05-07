@@ -67,11 +67,14 @@ shared.i_max=drifter.time<=shared.time_end;
 shared.i=drifter.lon>=shared.lon_0 & drifter.lon<=shared.lon_end & drifter.lat>=shared.lat_0 & drifter.lat<=shared.lat_end & drifter.time_min>=shared.time_0 & drifter.time_max<=shared.time_end;
 shared.i=logical(shared.i.*shared.i_min.*shared.i_max); % Indice of shared data 
 
+
+drifter.time_tout=drifter.time;
 drifter.U=drifter.vitesseU(shared.i);
 drifter.V=drifter.vitesseV(shared.i);
 drifter.lon=drifter.lon(shared.i);
 drifter.lat=drifter.lat(shared.i);
 drifter.time=drifter.time(shared.i);
+
 
 
 [radar,drifter,shared]=closer_point(radar,drifter,shared,Const); % searching for closer point
@@ -87,20 +90,22 @@ drifter.time=drifter.time(shared.i);
 %% Display
 if length(drifter.U)>1 %no error in case of no space and time shared  
 
-    [drifter.f,drifter.P1,drifter.f_inertial]=spectrum_drifter(drifter,radar,Const);
+    [drifter.f,drifter.P1,drifter.t_inertial]=spectrum_drifter(drifter,radar,Const);
+    T_inertie_th = (pi/(sind(stat.mean_lat)*Const.w_terre))/3600;
     
     %%%Display frequency spectrum 
     figure()
     plot(drifter.f,drifter.P1) 
-    title(strcat('Frequence inertielle = ',num2str(drifter.f_inertial)))
+    title(strcat('T\_inertie\_exp = ',num2str(drifter.t_inertial),' T\_inertie\_th = ',num2str(T_inertie_th)))
     xlabel('f (Hz)')
     ylabel('|P1(f)|')
+    
 %     if drifter.f_inertial > 34 && drifter.f_inertial <35
 %        savefig(strcat('Frequence inertielle = ',num2str(name_drifter(j).name(1:3))))
 %     end
 %     
     
-    %%% Display speed drifter and radar
+    %% Display speed drifter and radar
     figure()
     hold on
     plot(drifter.time_drifter2,drifter.Vr_filter2,'bo');
@@ -120,7 +125,7 @@ if length(drifter.U)>1 %no error in case of no space and time shared
     ylabel('erreur')
     datetick('x','mmm-dd-hh','keepticks')
     xlabel(strcat('moyenne\_diff = ',num2str(stat.mean_delta_U),' rms = ',num2str(stat.indiv.rms),' corr = ',num2str(stat.indiv.corr)))
-    pause
+    pause(1)
     
 end
 end 

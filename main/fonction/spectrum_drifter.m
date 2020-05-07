@@ -1,6 +1,8 @@
-function [f,P1,F_maxheures] = spectrum_drifter(drifter,data,Const)
+function [f,P1,T_maxheures] = spectrum_drifter(drifter,data,Const)
 %spectrum
 if data.name =='m'
+    
+    
     Y = fft(drifter.U_filter2);
     L=length(drifter.U_filter2);
     P2 = abs(Y/L);
@@ -12,11 +14,14 @@ if data.name =='m'
     f = Fs*(0:(L/2))/L;
     i_Max= P1 ==max(P1(4:end));
     F_max=f(i_Max);
-    F_maxheures=F_max*Const.d2h;
+    T_maxheures=Const.d2h/F_max;
+    
+    
 end
 
 if data.name =='r'
-    
+
+
     Y = fft(drifter.Vr_filter2);
     L=length(drifter.Vr_filter2);
     P2 = abs(Y/L);
@@ -28,7 +33,7 @@ if data.name =='r'
     f = Fs*(0:(L/2))/L;
     i_Max= P1 ==max(P1(4:end));
     F_max=f(i_Max);
-    F_maxheures=F_max*Const.d2h;
+    T_maxheures=Const.d2h/F_max;
 end
 end
 
