@@ -1,4 +1,5 @@
 %% -- MAIN -- %%
+test='rd' % We conpare here radar with drifters
 % Befor running choose the type of radar and the files you want to compare
 
 %% Configuration by User
@@ -30,8 +31,8 @@ addpath('..\..\NEMO','..\..\WERA');
 % Add path of fonction folder
 addpath('fonction')
 
-CONFIG_Const; % Use the configuration file for general constants
-CONFIG_Radar; % Configuration of Radar constants
+CONFIG_COnts % Use the configuration file for general constants
+CONFIG_Radar % Configuration of Radar constants
 
 % Statistics 
 stat.vr_rad_alldrift=[];

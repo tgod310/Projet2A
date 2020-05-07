@@ -1,5 +1,4 @@
 %% -- MAIN -- %%
-% Befor running choose the type of radar and the files you want to compare
 
 %% Configuration by User
 % Data cleaning
@@ -26,19 +25,17 @@ addpath('../../','../../NEMO','../../WERA');
 % Add path of fonction folder
 addpath('fonction')
 
-CONFIG_Const; % Use the configuration file for general constants
+CONFIG % Use the configuration file for general constants
 
-% Statistics 
 stat.u_mod_alldrift=[];
 stat.u_drift_alldrift=[];
 
 %% Read data 
 name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
-
 for j=1:length(name_drifter)%% loop on all drifters 
     disp(name_drifter(j).name) % to see the steps 
     drifter=read_DRIFTER(name_drifter(j).name,Const);
-    model=read_MODEL(file_MODEL_U,file_MODEL_V,Const);
+    model=read_MODEL('GLAZUR64_20190511_20190524_grid_U.nc','GLAZUR64_20190511_20190524_grid_V.nc',Const);
 
     %% Shared time
     shared.time_origin_julien=datenum(shared.time_origin); % time origin in julian calendar 
@@ -76,8 +73,9 @@ for j=1:length(name_drifter)%% loop on all drifters
 
     %% Frequency spectrum
     if length(drifter.U)>1
+
         [drifter.f,drifter.P1,drifter.t_inertial]=spectrum_drifter(drifter,model,Const);
-        T_inertie_th = (pi/(sind(stat.mean_lat)*Const.w_terre))/3600;
+       T_inertie_th = (pi/(sind(stat.mean_lat)*Const.w_terre))/3600;
 
         %%%Display frequency spectrum 
         figure()
@@ -96,6 +94,9 @@ for j=1:length(name_drifter)%% loop on all drifters
         datetick('x','mmm-dd-hh','keepticks')
         legend('drifter','model')
         hold off
-%         pause
+        pause
     end
+
+
 end
+
