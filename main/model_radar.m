@@ -6,24 +6,24 @@
 clear;close all;clc;
 
 % Data choosen by user
-type_RADAR='PEY'; % Choose the type of Radar between PEY, POB and COD
+type_RADAR='COD'; % Choose the type of Radar between PEY, POB and COD
 
 % PEY
-file_RADAR='PEY_L1_Y2018M02.nc'; % Name of the Radar file
+% file_RADAR='PEY_L1_Y2018M02.nc'; % Name of the Radar file
 
 % POB
 % file_RADAR='20190300001_20191002301_POB_L1.nc'; % Name of the Radar file
 
 % COD
-% file_RADAR='Radials_RUV_May19.nc'; % Name of the Radar file
+file_RADAR='Radials_RUV_May19.nc'; % Name of the Radar file
 
 % GLAZUR
-% file_MODEL_U='GLAZUR64_20190511_20190524_grid_U.nc'; % Name of the model file
-% file_MODEL_V='GLAZUR64_20190511_20190524_grid_V.nc'; % Name of the model file
+file_MODEL_U='GLAZUR64_20190511_20190524_grid_U.nc'; % Name of the model file
+file_MODEL_V='GLAZUR64_20190511_20190524_grid_V.nc'; % Name of the model file
 
 % NIDOR
-file_MODEL_U='1_NIDOR_20180210_20180212_grid_U.nc'; % Name of the model file
-file_MODEL_V='1_NIDOR_20180210_20180212_grid_V.nc'; % Name of the model file
+% file_MODEL_U='1_NIDOR_20190511_20190524_grid_U.nc'; % Name of the model file
+% file_MODEL_V='1_NIDOR_20190511_20190524_grid_V.nc'; % Name of the model file
 
 % Configuration of constantes
 i_Affichage=10; % choose day/hour to display
@@ -57,22 +57,24 @@ model=projection(model,radar); % Space projection of model on radar radial
 
 %% Comparison
 shared.difference=(abs(model.Vr)-abs(radar.interp_Vr)).^2/max(abs(model.Vr(:,:,:)),[],'all','omitnan')^2; % calcul de la difference entre radar et model
-shared.difference2=abs(abs(model.Vr)-abs(radar.interp_Vr));
+shared.difference2=abs(model.Vr-radar.interp_Vr);
 shared.difference2(shared.difference2>0.2)=NaN; % Suppression des valeurs trop importantes (> 0.2m/s)
 
+% Temporal evolution of difference on a section
 Const.size=size(shared.difference);
-shared.difference3=shared.difference2;
-shared.difference3(shared.lat>Const.lat0)=NaN;
-D=abs(shared.lon-Const.lon0);
-D_min=min(D);
-shared.graph_diff3=NaN(Const.size(2),Const.size(3));
-
-for i=1:Const.size(3)
-    var=shared.difference3(:,:,i);
-    shared.graph_diff3(:,i)=var(D==D_min);        
+shared.difference3=NaN(Const.size(2),Const.size(3));
+delta_alpha=2; % error intervel for the angle
+shared.diff_lat3=shared.lat(radar.angle<=Const.alpha+delta_alpha & radar.angle>=Const.alpha-delta_alpha); % Latitudes of points where we are in the angle interval
+shared.diff_lat3=reshape(shared.diff_lat3,[Const.size(2),length(shared.diff_lat3)/Const.size(2)]);
+shared.diff_lat3=mean(shared.diff_lat3,2); % Mean of latitudes for each lines
+for i=1:Const.size(3) % calcul on each time, same as for the latitudes
+    var=shared.difference2(:,:,i);
+    var2=var(radar.angle<=Const.alpha+delta_alpha & radar.angle>=Const.alpha-delta_alpha);
+    var2=reshape(var2,[Const.size(2),length(var2)/Const.size(2)]);
+    shared.difference3(:,i)=mean(var2,2,'omitnan');
 end
+[shared.T,shared.lat3]=meshgrid(shared.time,shared.diff_lat3); % Creation of the grid for display
 
-[shared.T,shared.lat3]=meshgrid(shared.time,shared.lat(D==D_min));
 
 %% Display
 
@@ -158,8 +160,8 @@ for i=2:length(shared.time)-1
     s.Label.String='Vitesse (m\cdot s^{-1})';
     title('Difference radar-modele')
     
-    sgtitle([datestr(shared.time(i)+shared.time_origin_julien),' i=',i])
-    pause(0.5);
+    sgtitle([datestr(shared.time(i)+shared.time_origin_julien),' i=',num2str(i)])
+    pause();
 end
 
 figure()
@@ -171,8 +173,8 @@ title('Vitesse radar avec contour du modèle')
 hold off
 
 figure()
-contourf(shared.T+shared.time_origin_julien,shared.lat3,shared.graph_diff3)
-title(['Différence entre radar et modèle en fonction du temps sur la longitude ' num2str(Const.lon0)])
+contourf(shared.T+shared.time_origin_julien,shared.lat3,shared.difference3)
+title(['Différence entre radar et modèle en fonction du temps sur la radiale ' num2str(Const.alpha) '°'])
 s.Label.String='Vitesse (m\cdot s^{-1})';
 x_tl=cell(1,Const.size(3));
 dat=datestr(shared.T+shared.time_origin_julien);

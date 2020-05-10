@@ -1,5 +1,7 @@
 %% File of configuration for radar constants
 
+Const.alpha=110; % Angle for temporal evolutionof difference on section
+
 if type_RADAR=='PEY'
 % PEY position
 Const.Radar_type='PEY';
