@@ -1,8 +1,7 @@
 function [stat,shared] = statistic(drifter,data,shared,stat)
 %Statistics
-
+if length(drifter.U)>1
 if data.name=='r'
-
 %%% Remove NaN 
 shared.i_notNaN=not(isnan(shared.delta_Vr));
 to_ignore1 = isnan(data.closer_Vr) == 1;
@@ -48,6 +47,7 @@ stat.alldrift.corr        = sum( (stat.vr_rad_alldrift-mean(stat.vr_rad_alldrift
 end
 
 if data.name=='m'
+    if length(drifter.U)>1
     %%% Remove NaN 
 shared.i_notNaN=not(isnan(shared.delta_U));
 shared.i_notNaN1=not(isnan(shared.delta_T));
@@ -88,7 +88,7 @@ stat.alldrift.rms        = sqrt(mean((stat.u_mod_alldrift - stat.u_drift_alldrif
 stat.alldrift.corr        = sum( (stat.u_mod_alldrift-mean(stat.u_mod_alldrift)) .* (stat.u_drift_alldrift-mean(stat.u_drift_alldrift)) ) ...
      ./ ( sqrt(sum((stat.u_mod_alldrift - mean(stat.u_mod_alldrift)).^2)).*sqrt(sum((stat.u_drift_alldrift - mean(stat.u_drift_alldrift)).^2)) );
         
-
+    end
 end
 end
 

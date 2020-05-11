@@ -31,7 +31,7 @@ name_drifter = dir([drifter.path_drifter '/*.xlsx']); %% files name
 for j=1:length(name_drifter)%% loop on all drifters 
    disp(name_drifter(j).name) % to see the steps 
 drifter=read_DRIFTER(name_drifter(j).name,Const);
-model=read_MODEL('GLAZUR64_20190511_20190524_grid_U.nc','GLAZUR64_20190511_20190524_grid_V.nc',Const);
+model=read_MODEL('1_NIDOR_20190511_20190524_grid_U.nc','1_NIDOR_20190511_20190524_grid_V.nc',Const);
 
 %% Shared time
 shared.time_origin_julien=datenum(shared.time_origin); % time origin in julian calendar 
