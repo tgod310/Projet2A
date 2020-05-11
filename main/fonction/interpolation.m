@@ -14,8 +14,6 @@ radar.interp_Vr=NaN(n(1),n(2),s);
 for i=2:s-1
     i_min=find(radar.time>=(shared.time(i-1)+shared.time(i))/2,1);
     i_max=find(radar.time<=(shared.time(i)+shared.time(i+1))/2,1,'last');
-%     i_min=find(radar.time>=floor(shared.time(i)), 1 ); % start of day
-%     i_max=find(radar.time<=ceil(shared.time(i)), 1, 'last' ); % end of day  
-    radar.interp_Vr(:,:,i)=mean(radar.Vr(:,:,i_min:i_max),3,'omitnan'); %  daily radar speed mean 
+    radar.interp_Vr(:,:,i)=mean(radar.Vr(:,:,i_min:i_max),3,'omitnan'); % Radar speed mean
 end
 end

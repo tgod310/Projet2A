@@ -1,11 +1,6 @@
-%% Fichier de configuration des constantes
+%% File of configuration for radar constants
 
-Const.UTC2        = 1/12;      % real time to UTC
-Const.R           = 6371;      % earth radius km 
-Const.d2s         = 86400;     % day in sec
-Const.km2m        = 1000;      % km in m 
-Const.d2h         = 24;        % day in hour
-Const.w_terre     = (2*pi)/(23*3600+56*60+4.09); % earth angular velocity  
+Const.alpha=110; % Angle for temporal evolutionof difference on section
 
 if type_RADAR=='PEY'
 % PEY position
