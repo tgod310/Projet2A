@@ -23,10 +23,10 @@ file_RADAR='Radials_RUV_May19.nc'; % Name of the Radar file
 % Configuration of constantes
 Affichage_jour=10; % choix du jour a afficher
 
-% Add path of studied data
-%addpath('../../','../../NEMO','../../WERA');
-% Ajout chemin Yann 
-addpath('..\..\NEMO','..\..\WERA');
+% Add path Linux
+%addpath('../../round1','../../NEMO','../../WERA');
+% Ajout chemin Windows 
+addpath('..\..\NEMO','..\..\WERA','..\..\round1');
 % Add path of fonction folder
 addpath('fonction')
 
@@ -94,10 +94,6 @@ for j=1:length(name_drifter)%% loop on all drifters
         xlabel('f (Hz)')
         ylabel('|P1(f)|')
 
-%         if drifter.f_inertial > 34 && drifter.f_inertial <35
-%            savefig(strcat('Frequence inertielle = ',num2str(name_drifter(j).name(1:3))))
-%         end
-
 
         %% Display speed drifter and radar
         figure()
@@ -110,16 +106,14 @@ for j=1:length(name_drifter)%% loop on all drifters
         legend('drifter','radar')
         hold off
 
-%         if drifter.f_inertial > 34 && drifter.f_inertial <35
-%            savefig(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
-%         end
+
         figure()
         plot(drifter.time,shared.delta_Vr,'b');
         title(strcat('Comparaison radar drifter ',name_drifter(j).name(1:3)))
         ylabel('erreur')
         datetick('x','mmm-dd-hh','keepticks')
         xlabel(strcat('moyenne\_diff = ',num2str(stat.mean_delta_U),' rms = ',num2str(stat.indiv.rms),' corr = ',num2str(stat.indiv.corr)))
-        pause(1)
+        pause
     end
 end 
  
